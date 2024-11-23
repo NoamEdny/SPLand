@@ -19,7 +19,7 @@ class NaiveSelection: public SelectionPolicy {
         NaiveSelection *clone() const override;
         ~NaiveSelection() override = default;
     private:
-        int lastSelectedIndex;
+        int lastSelectedIndex ;
 };
 
 class BalancedSelection: public SelectionPolicy {

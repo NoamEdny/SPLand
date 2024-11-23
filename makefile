@@ -1,5 +1,8 @@
+<<<<<<< HEAD
 # Please implement your Makefile rules and targets below.
 # Customize this file to define how to build your project.
+=======
+>>>>>>> 330a2be6bab3daffe255d15b35f3debc1dca77ef
 # Compiler
 CXX = g++
 
@@ -29,4 +32,8 @@ $(SRCDIR)/%.o: $(SRCDIR)/%.cpp
 
 # Clean build files
 clean:
+<<<<<<< HEAD
 	rm -f $(SRCDIR)/*.o $(TARGET)
+=======
+	rm -f $(SRCDIR)/*.o $(TARGET)
+>>>>>>> 330a2be6bab3daffe255d15b35f3debc1dca77ef
