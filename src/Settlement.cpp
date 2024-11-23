@@ -17,5 +17,8 @@ Settlement:: SettlementType getType() const
 
 Settlement:: const string toString() const;
 {
+if (type == 1){
 
+}
+else if (type == 2)
 }
