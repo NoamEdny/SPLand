@@ -1,10 +1,12 @@
 #include "Settlement.h"
+#include <iostream>
 
 //Constrector:
 Settlement:: Settlement(const string &name, SettlementType type) : name(name), type(type) {}
 
-//De-Constrector: No need for De-Constrector 
+//Rule of 3: No need, because the default is good
 
+//Methods:
 
 const string &Settlement:: getName() const{
     return name;
