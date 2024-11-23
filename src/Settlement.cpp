@@ -6,19 +6,32 @@ Settlement:: Settlement(const string &name, SettlementType type) : name(name), t
 //De-Constrector: No need for De-Constrector 
 
 
-Settlement:: const string &getName() const{
-    return this.name;
+const string &Settlement:: getName() const{
+    return name;
 }
 
-Settlement:: SettlementType getType() const
+SettlementType Settlement:: getType() const
 {
-    return this.type;
+    return type;
 }
 
-Settlement:: const string toString() const;
+const string Settlement:: toString() const
 {
-if (type == 1){
+    string result = "Settlement Name: " + name + ", Type: ";
 
+    // Convert SettlementType to string
+    switch (type) {
+        case SettlementType::VILLAGE:
+            result += "VILLAGE";
+            break;
+        case SettlementType::CITY:
+            result += "CITY";
+            break;
+        case SettlementType::METROPOLIS:
+            result += "METROPOLIS";
+            break;
+    }
+
+    return result;
 }
-else if (type == 2)
-}
+
