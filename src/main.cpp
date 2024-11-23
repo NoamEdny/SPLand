@@ -1,9 +1,10 @@
-#include "Simulation.h"
+/*#include "Simulation.h"
 #include <iostream>
+#include "Settlement.h"
 
 using namespace std;
 
- Simulation* backup = nullptr;
+// Simulation* backup = nullptr;
 
 int main(int argc, char** argv){
   /*
@@ -18,12 +19,31 @@ int main(int argc, char** argv){
     	delete backup;
     	backup = nullptr;
   */ 
+#include <iostream>
+#include "Settlement.h"
 
-if (argc > 1) {
-    std::cout << "First argument" << argv[1] << std::endl;
-}
-else {
-    std::cout << "No argument provided" << std::endl;
-}
+using namespace std;
+
+int main() {
+    // יצירת אובייקטים מסוג Settlement
+    Settlement village("KfarSP", SettlementType::VILLAGE);
+    Settlement city("TelSP", SettlementType::CITY);
+    Settlement metropolis("SPopolis", SettlementType::METROPOLIS);
+
+    // הדפסת פרטי היישובים
+    cout << "Settlement Details:" << endl;
+
+    cout << "Name: " << village.getName() 
+         << ", Type: " << (village.getType() == SettlementType::VILLAGE ? "Village" : "Unknown") 
+         << endl;
+
+    cout << "Name: " << city.getName() 
+         << ", Type: " << (city.getType() == SettlementType::CITY ? "City" : "Unknown") 
+         << endl;
+
+    cout << "Name: " << metropolis.getName() 
+         << ", Type: " << (metropolis.getType() == SettlementType::METROPOLIS ? "Metropolis" : "Unknown") 
+         << endl;
+
     return 0;
 }
