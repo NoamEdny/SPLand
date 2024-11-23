@@ -1,7 +1,7 @@
 #include "Settlement.h"
 
 //Constrector:
-Settlement:: Settlement(const string &name, SettlementType type) : this.name(name), this.type(type) {}
+Settlement:: Settlement(const string &name, SettlementType type) : name(name), type(type) {}
 
 //De-Constrector: No need for De-Constrector 
 
