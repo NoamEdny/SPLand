@@ -1,9 +1,10 @@
-#include "Simulation.h"
+//#include "Simulation.h"
+#include "Settlement.h"
 #include <iostream>
 
 using namespace std;
 
- Simulation* backup = nullptr;
+//Simulation* backup = nullptr;
 
 int main(int argc, char** argv){
   /*
@@ -19,11 +20,6 @@ int main(int argc, char** argv){
     	backup = nullptr;
   */ 
 
-if (argc > 1) {
-    std::cout << "First argument" << argv[1] << std::endl;
-}
-else {
-    std::cout << "No argument provided" << std::endl;
-}
+cout << "hiii" << endl;
     return 0;
 }
