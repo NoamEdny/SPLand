@@ -13,22 +13,40 @@ class SelectionPolicy {
 
 class NaiveSelection: public SelectionPolicy {
     public:
+        //Constrector:
         NaiveSelection();
+
+        // Ruls Of 3:
+        // Copy-Constrector:
+        NaiveSelection(NaiveSelection &other);
+
+        //Destructor:
+        ~NaiveSelection() override = default;
+        
+        //Methods:
         const FacilityType& selectFacility(const vector<FacilityType>& facilitiesOptions) override;
         const string toString() const override;
         NaiveSelection *clone() const override;
-        ~NaiveSelection() override = default;
     private:
         int lastSelectedIndex ;
 };
 
 class BalancedSelection: public SelectionPolicy {
     public:
+        //Constrector:
         BalancedSelection(int LifeQualityScore, int EconomyScore, int EnvironmentScore);
+
+        // Ruls Of 3:
+        // Copy-Constrector:
+        BalancedSelection(BalancedSelection &other);
+
+        //Destructor:
+        ~BalancedSelection() override = default;
+
+        //Methods:
         const FacilityType& selectFacility(const vector<FacilityType>& facilitiesOptions) override;
         const string toString() const override;
         BalancedSelection *clone() const override;
-        ~BalancedSelection() override = default;
     private:
         int LifeQualityScore;
         int EconomyScore;
@@ -37,11 +55,21 @@ class BalancedSelection: public SelectionPolicy {
 
 class EconomySelection: public SelectionPolicy {
     public:
+        //Constrector:
         EconomySelection();
+
+        // Ruls Of 3:
+        // Copy-Constrector:
+        EconomySelection(EconomySelection &other);
+
+        //Destructor:
+        ~EconomySelection() override = default;
+
+        //Methods:
         const FacilityType& selectFacility(const vector<FacilityType>& facilitiesOptions) override;
         const string toString() const override;
         EconomySelection *clone() const override;
-        ~EconomySelection() override = default;
+
     private:
         int lastSelectedIndex;
 
@@ -49,11 +77,19 @@ class EconomySelection: public SelectionPolicy {
 
 class SustainabilitySelection: public SelectionPolicy {
     public:
+        //Constrector:
         SustainabilitySelection();
+
+        // Ruls Of 3:
+        // Copy-Constrector:
+        SustainabilitySelection(SustainabilitySelection &other);
+
+        //Destructor:
+        ~SustainabilitySelection() override = default;
+
         const FacilityType& selectFacility(const vector<FacilityType>& facilitiesOptions) override;
         const string toString() const override;
         SustainabilitySelection *clone() const override;
-        ~SustainabilitySelection() override = default;
     private:
         int lastSelectedIndex;
 };

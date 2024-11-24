@@ -1,8 +1,3 @@
-<<<<<<< HEAD
-# Please implement your Makefile rules and targets below.
-# Customize this file to define how to build your project.
-=======
->>>>>>> 330a2be6bab3daffe255d15b35f3debc1dca77ef
 # Compiler
 CXX = g++
 
@@ -14,7 +9,7 @@ TARGET = settlement_test
 
 # Source files
 SRCDIR = src
-SOURCES = $(SRCDIR)/main.cpp $(SRCDIR)/Settlement.cpp
+SOURCES = $(SRCDIR)/main.cpp $(SRCDIR)/Settlement.cpp $(SRCDIR)/Facility.cpp  # הוספתי את Facility.cpp
 
 # Object files
 OBJECTS = $(SOURCES:.cpp=.o)
@@ -32,8 +27,4 @@ $(SRCDIR)/%.o: $(SRCDIR)/%.cpp
 
 # Clean build files
 clean:
-<<<<<<< HEAD
-	rm -f $(SRCDIR)/*.o $(TARGET)
-=======
 	rm -f $(SRCDIR)/*.o $(TARGET)
->>>>>>> 330a2be6bab3daffe255d15b35f3debc1dca77ef

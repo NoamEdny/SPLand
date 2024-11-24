@@ -23,7 +23,6 @@ class FacilityType {
         
         //Ruls Of 3:
         FacilityType(FacilityType &other);
-        ~FacilityType();
         FacilityType operator=(const FacilityType & other);
         const string &getName() const;
         int getCost() const;
@@ -53,7 +52,8 @@ class Facility: public FacilityType {
         Facility(FacilityType &type, const string &settlementName);
 
         //Ruls Of 3:
-
+        // Copy-Constrector:
+        Facility(Facility &other);
         //Methods:
         const string &getSettlementName() const;
         const int getTimeLeft() const;

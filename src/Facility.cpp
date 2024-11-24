@@ -45,7 +45,7 @@ int FacilityType::getEconomyScore() const {
 FacilityCategory FacilityType::getCategory() const {
     return category;
 }
-//***************************************************************************************************** */
+//***********************************************************************************************************
 
 //************************************************  Facility ************************************************
 
@@ -65,7 +65,7 @@ status(FacilityStatus::UNDER_CONSTRUCTIONS) // defult state of status is UNDER_C
 
 // Copy-Constrector:
 Facility::Facility(Facility &other):
-FacilityType(other), settlementName(other.getSettlementName()),timeLeft(getTimeLeft()), status(getStatus())
+FacilityType(other), settlementName(other.getSettlementName()),timeLeft(other.getTimeLeft()), status(other.getStatus())
 {}
 
 //Methods:
@@ -88,13 +88,32 @@ FacilityStatus Facility::step(){
     }
     return status;
 }
+void Facility::setStatus(FacilityStatus status) {
+    this->status = status;
+}
 
 const FacilityStatus &Facility::getStatus() const {
     return status;
 }
 
-const string &Facility::toString() const {
-    return "bj";
+const string Facility::toString() const {
+    // FacilityStatus To String:
+    string statusString = "UNKNOWN_STATUS";
+    switch (this->getStatus()) {
+        case FacilityStatus::UNDER_CONSTRUCTIONS:
+            statusString = "UNDER_CONSTRUCTIONS";
+            break;
+        case FacilityStatus::OPERATIONAL:
+            statusString = "OPERATIONAL";
+            break;
+
+    }
+
+    std::string timeToString = std::to_string(this->getTimeLeft());
+
+    const string toString = "name: " + this->getName() + ", settlement name: " + this->getSettlementName() +
+    ", status: "+ statusString +", time left: "+ timeToString;
+    return toString;
 }
 
 
