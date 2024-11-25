@@ -21,9 +21,6 @@ NaiveSelection::NaiveSelection() : lastSelectedIndex(-1) {}
 NaiveSelection:: NaiveSelection(const NaiveSelection &other) : lastSelectedIndex(other.lastSelectedIndex) {}
 
 
-//Destructor:
-NaiveSelection::~NaiveSelection()
-{}
 
 //Copy -Opretor:
 
@@ -113,9 +110,6 @@ EconomySelection::EconomySelection() : lastSelectedIndex(-1) {}
 //Copy constractor
 EconomySelection::EconomySelection(const EconomySelection &other) : lastSelectedIndex(other.lastSelectedIndex) {}
 
-//Destructor:
-EconomySelection::~EconomySelection() 
-{}
 
 //Methods:
 //selectFacility:
@@ -154,9 +148,6 @@ EconomySelection* EconomySelection :: clone() const {
 //Copy constractor
 SustainabilitySelection::SustainabilitySelection(const SustainabilitySelection &other) : lastSelectedIndex(other.lastSelectedIndex) {}
 
-//Destructor:
-SustainabilitySelection::~SustainabilitySelection() 
-{}
 
 //Methods:
 //selectFacility:

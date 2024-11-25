@@ -19,6 +19,7 @@ enum class FacilityCategory {
 class FacilityType {
     public:
         //Constrectors:
+        FacilityType() = default;
         FacilityType(const string &name, const FacilityCategory category, const int price, const int lifeQuality_score, const int economy_score, const int environment_score);
         
         //Ruls Of 3:
