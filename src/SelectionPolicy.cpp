@@ -1,5 +1,11 @@
 #include "SelectionPolicy.h"
 #include <climits> 
+#include <string>
+using std::string;
+using std::vector;
+using std::max;
+using std::min;
+
 
 //***********************************************************************************************************
 
@@ -12,14 +18,14 @@ NaiveSelection::NaiveSelection() : lastSelectedIndex(-1) {}
 // Ruls Of 3:
 
 // Copy-Constrector:
-NaiveSelection:: NaiveSelection(NaiveSelection &other) : lastSelectedIndex(other.lastSelectedIndex) {}
+NaiveSelection:: NaiveSelection(const NaiveSelection &other) : lastSelectedIndex(other.lastSelectedIndex) {}
 
 
 //Destructor:
-NaiveSelection::~NaiveSelection() override{
-    delete NaiveSelection;
-}
+NaiveSelection::~NaiveSelection()
+{}
 
+//Copy -Opretor:
 
 //Methods:
 
@@ -29,14 +35,15 @@ const FacilityType& NaiveSelection::selectFacility(const std::vector<FacilityTyp
     return facilitiesOptions[lastSelectedIndex];
 }
 //toString:
-const string NaiveSelection::toString() const override{
+const string NaiveSelection::toString() const{
     return "Naive";
 }
 
 //clone
-NaiveSelection::NaiveSelection *clone() const override{
+NaiveSelection* NaiveSelection::clone() const {
     return new NaiveSelection(*this);
 }
+
 
 //***********************************************************************************************************
 
@@ -49,50 +56,49 @@ BalancedSelection::BalancedSelection(int LifeQualityScore, int EconomyScore, int
 // Ruls Of 3:
 
 // Copy constactor
-BalancedSelection::BalancedSelection(BalancedSelection &other) : LifeQualityScore(other.LifeQualityScore), EconomyScore(other.EconomyScore), EnvironmentScore(other.EnvironmentScore) {}
+BalancedSelection::BalancedSelection(const BalancedSelection &other) :
+ LifeQualityScore(other.LifeQualityScore), EconomyScore(other.EconomyScore), EnvironmentScore(other.EnvironmentScore) {}
 
 //Destructor:
-BalancedSelection::~BalancedSelection() override{
-    delete BalancedSelection;
-}
+/*BalancedSelection::~BalancedSelection() 
+{}*/
+
 
 //Methods:
 
 //selectFacility:
-const FacilityType& selectFacility(const vector<FacilityType>& facilitiesOptions) override {
-     // Start with a very large initial value to find the minimum difference
+const FacilityType& BalancedSelection::selectFacility(const vector<FacilityType>& facilitiesOptions) {
     int minDifference = INT_MAX; 
     int selectedIndex = 0;
-    // Iterate over all available facilities
+
     for (size_t i = 0; i < facilitiesOptions.size(); ++i) {
         const FacilityType& facility = facilitiesOptions[i];
-         // Calculate the new scores after adding the current facility's impact
+
         int newLifeQuality = LifeQualityScore + facility.getLifeQualityScore();
         int newEconomy = EconomyScore + facility.getEconomyScore();
         int newEnvironment = EnvironmentScore + facility.getEnvironmentScore();
 
-    1   // Determine the maximum and minimum scores after adding the facility
-        int maxScore = std::max({newLifeQuality, newEconomy, newEnvironment});
-        int minScore = std::min({newLifeQuality, newEconomy, newEnvironment});
+        int maxScore = std::max(newLifeQuality, std::max(newEconomy, newEnvironment));
+        int minScore = std::min(newLifeQuality, std::min(newEconomy, newEnvironment));
         int difference = maxScore - minScore;
 
-         // Update the selected index if this facility provides a smaller difference
         if (difference < minDifference) {
             minDifference = difference;
             selectedIndex = i;
         }
     }
-    // Return the facility with the smallest difference in scores
+
     return facilitiesOptions[selectedIndex];
 }
 
+
 //toString:
-const string toString() const override {
+const string BalancedSelection::toString() const {
     return "Balanced";
 }
 
 //clone:
-BalancedSelection *clone() const override {
+BalancedSelection* BalancedSelection::clone() const {
     return new BalancedSelection(*this);
 }
 
@@ -104,18 +110,16 @@ BalancedSelection *clone() const override {
 EconomySelection::EconomySelection() : lastSelectedIndex(-1) {}
 
 // Ruls Of 3:
-
 //Copy constractor
-EconomySelection::EconomySelection(EconomySelection &other) : lastSelectedIndex(other.lastSelectedIndex) {}
+EconomySelection::EconomySelection(const EconomySelection &other) : lastSelectedIndex(other.lastSelectedIndex) {}
 
 //Destructor:
-~EconomySelection() override{
-    delete EconomySelection;
-}
+EconomySelection::~EconomySelection() 
+{}
 
 //Methods:
 //selectFacility:
-const FacilityType& selectFacility(const vector<FacilityType>& facilitiesOptions) override{
+const FacilityType& EconomySelection::selectFacility(const vector<FacilityType>& facilitiesOptions) {
 
 
     // Iterate over the facilities in a circular manner, starting from the next index
@@ -127,30 +131,36 @@ const FacilityType& selectFacility(const vector<FacilityType>& facilitiesOptions
             return facilitiesOptions[index]; 
         }
     }
-    // If no facility matches, throw an exception
-    //throw std::runtime_error("No ECONOMY facility found.");
 }
 
 //toString
- const string EconomySelection::toString() const override {
+ const string EconomySelection::toString() const {
     return "Economy";
 }
 
 //clone
-EconomySelection::EconomySelection *clone() const override {
+EconomySelection* EconomySelection :: clone() const {
     return new EconomySelection(*this);
 }
 
+//***********************************************************************************************************
+//************************************************  SustainabilitySelectio ************************************************
 
-
-class SustainabilitySelection: public SelectionPolicy {
-    //Constractor
+    
+//Constractor
  SustainabilitySelection::SustainabilitySelection() : lastSelectedIndex(-1) {}
+
+// Ruls Of 3:
 //Copy constractor
-SustainabilitySelection::SustainabilitySelection(SustainabilitySelection &other) : lastSelectedIndex(other.lastSelectedIndex) {}
+SustainabilitySelection::SustainabilitySelection(const SustainabilitySelection &other) : lastSelectedIndex(other.lastSelectedIndex) {}
 
+//Destructor:
+SustainabilitySelection::~SustainabilitySelection() 
+{}
 
-const FacilityType& selectFacility(const vector<FacilityType>& facilitiesOptions) override{
+//Methods:
+//selectFacility:
+const FacilityType& SustainabilitySelection::selectFacility(const vector<FacilityType>& facilitiesOptions){
         // Iterate over the facilities in a circular manner, starting from the next index
      for (size_t i = 1; i <= facilitiesOptions.size(); ++i) {
         size_t index = (lastSelectedIndex + i) % facilitiesOptions.size(); 
@@ -159,20 +169,21 @@ const FacilityType& selectFacility(const vector<FacilityType>& facilitiesOptions
             lastSelectedIndex = index; 
             return facilitiesOptions[index]; 
         }
+    }
 }
+//toString
 
- const string toString() const override{
+const string SustainabilitySelection::toString() const {
     return "Sustainability";
 }
 
-SustainabilitySelection *clone() const override{
+
+//clone:
+SustainabilitySelection* SustainabilitySelection :: clone() const {
     return new SustainabilitySelection(*this);
-    
-}  
-~SustainabilitySelection() override{
-    delete SustainabilitySelection;
 }
-}
+
+
 
 
 

@@ -4,9 +4,11 @@
 
 //************************************************  FacilityType ************************************************
 //Constrector:
-FacilityType:: FacilityType(const string &name, const FacilityCategory category,
+FacilityType::FacilityType(const string &name, const FacilityCategory category,
  const int price, const int lifeQuality_score, const int economy_score, const int environment_score):
-name(name), category(category) , price(price), lifeQuality_score(lifeQuality_score),
+name(name), category(category) ,
+ price(price < 1 ? 1 : price), // price can't be 0 or less
+ lifeQuality_score(lifeQuality_score),
  economy_score(economy_score), environment_score(environment_score)
 {}
 
