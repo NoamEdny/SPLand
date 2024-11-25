@@ -2,7 +2,9 @@
 #include <iostream>
 
 //Constrector:
-Settlement:: Settlement(const string &name, SettlementType type) : name(name), type(type) {}
+Settlement:: Settlement(const string &name, SettlementType type)
+: name(name), type(type) {}
+
 
 //Rule of 3: No need, because the default is good
 
