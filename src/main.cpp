@@ -28,16 +28,15 @@ using namespace std;
 int main() {
    // Create a settlement
     Settlement village("KfarSP", SettlementType::VILLAGE);
-
+    cout << "hiiii" << endl;
     // Create facilities and add them to a vector
-    vector<FacilityType> facilities;
 
     vector<FacilityType> facilities;
 facilities.push_back(FacilityType("school", FacilityCategory::LIFE_QUALITY, 5, 3, 1, 2));
 facilities.push_back(FacilityType("hospital", FacilityCategory::ECONOMY, 7, 2, 5, 1));
 facilities.push_back(FacilityType("park", FacilityCategory::LIFE_QUALITY, 3, 4, 1, 3));
 
-/*
+
     // Print settlement details
     cout << "Settlement Details:" << endl;
     cout << "Name: " << village.getName()
@@ -69,6 +68,6 @@ facilities.push_back(FacilityType("park", FacilityCategory::LIFE_QUALITY, 3, 4, 
     EconomySelection economyPolicy;
     const FacilityType& selectedFacilityEconomy = economyPolicy.selectFacility(facilities);
     cout << "Economy Policy selected: " << selectedFacilityEconomy.getName() << endl;
-*/
+
     return 0;
 }

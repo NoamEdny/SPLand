@@ -18,17 +18,10 @@ enum class FacilityCategory {
 
 class FacilityType {
     public:
-        //Constrectors:
-        FacilityType() = default;
         FacilityType(const string &name, const FacilityCategory category, const int price, const int lifeQuality_score, const int economy_score, const int environment_score);
-        
-        //Ruls Of 3:
-        FacilityType(FacilityType &other);
-        FacilityType operator=(const FacilityType & other);
+        FacilityType();
         const string &getName() const;
         int getCost() const;
-
-        //Methods:
         int getLifeQualityScore() const;
         int getEnvironmentScore() const;
         int getEconomyScore() const;
@@ -48,16 +41,15 @@ class FacilityType {
 class Facility: public FacilityType {
 
     public:
-        //Constrectors:
         Facility(const string &name, const string &settlementName, const FacilityCategory category, const int price, const int lifeQuality_score, const int economy_score, const int environment_score);
-        Facility(FacilityType &type, const string &settlementName);
+        Facility(const FacilityType &type, const string &settlementName);
+        Facility();
 
-        //Ruls Of 3:
-        // Copy-Constrector:
-        Facility(Facility &other);
-        //Methods:
+        //Rule Of 3:
+        Facility(const Facility &other) = default;
         const string &getSettlementName() const;
         const int getTimeLeft() const;
+        
         FacilityStatus step();
         void setStatus(FacilityStatus status);
         const FacilityStatus& getStatus() const;

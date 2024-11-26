@@ -1,122 +1,94 @@
 #include "Facility.h"
-#include <iostream>
+#include <string>
+#include <vector>
+using std::string;
+using std::vector;
 
+//***********************************************************************************************************
 
 //************************************************  FacilityType ************************************************
-//Constrector:
-FacilityType::FacilityType(const string &name, const FacilityCategory category,
- const int price, const int lifeQuality_score, const int economy_score, const int environment_score):
-name(name), category(category) ,
- price(price < 1 ? 1 : price), // price can't be 0 or less
- lifeQuality_score(lifeQuality_score),
- economy_score(economy_score), environment_score(environment_score)
-{}
 
-// Ruls Of 3:
+//Constrectors:
+FacilityType::FacilityType(const string &name, const FacilityCategory category, const int price, const int lifeQuality_score, const int economy_score, const int environment_score)
+: name(name), category(category), price(price), lifeQuality_score(lifeQuality_score),
+ economy_score(economy_score), environment_score(environment_score){}
 
-// Copy-Constrector:
-FacilityType:: FacilityType(FacilityType &other) :
-name(other.getName()), category(other.getCategory()) , price(other.getCost()), lifeQuality_score(other.getLifeQualityScore()),
- economy_score(other.getEconomyScore()), environment_score(other.getEnvironmentScore())
- {}
+FacilityType::FacilityType()
+: FacilityType("", FacilityCategory::LIFE_QUALITY, 0, 0, 0, 0){}
 
-// 
+//Rule Of 3: Defult
 
-//Methods:
-const string &FacilityType::getName() const {
+//Method
+const string &FacilityType::getName() const{
     return name;
 }
 
-
-int FacilityType::getCost() const {
+int FacilityType::getCost() const{
     return price;
 }
 
-int FacilityType::getLifeQualityScore() const {
+int FacilityType::getLifeQualityScore() const{
     return lifeQuality_score;
 }
 
-int FacilityType::getEnvironmentScore() const {
+int FacilityType::getEnvironmentScore() const{
     return environment_score;
 }
 
-int FacilityType::getEconomyScore() const {
+int FacilityType::getEconomyScore() const{
     return economy_score;
 }
 
-FacilityCategory FacilityType::getCategory() const {
+FacilityCategory FacilityType::getCategory() const{
     return category;
 }
+
 //***********************************************************************************************************
 
 //************************************************  Facility ************************************************
 
 //Constrectors:
-Facility::Facility(const string &name, const string &settlementName, const FacilityCategory category, const int price, const int lifeQuality_score, const int economy_score, const int environment_score):
-FacilityType(name, category, price, lifeQuality_score, economy_score, environment_score), 
- settlementName(settlementName),timeLeft(price),
-  status(FacilityStatus::UNDER_CONSTRUCTIONS) // defult state of status is UNDER_CONSTRUCTIONS = 0
-{}
+Facility::Facility(const string &name, const string &settlementName, const FacilityCategory category, const int price, const int lifeQuality_score, const int economy_score, const int environment_score)
+    : FacilityType(name, category, price, lifeQuality_score, economy_score, environment_score),
+    settlementName(settlementName),
+    status(FacilityStatus::UNDER_CONSTRUCTIONS),
+    timeLeft(price){}
 
-Facility:: Facility(FacilityType &type, const string &settlementName):
-FacilityType(type), settlementName(settlementName), timeLeft(type.getCost()),
-status(FacilityStatus::UNDER_CONSTRUCTIONS) // defult state of status is UNDER_CONSTRUCTIONS = 0
- {}
+Facility::Facility(const FacilityType &type, const string &settlementName)
+    :Facility(type.FacilityType::getName(), settlementName, type.FacilityType::getCategory(), type.FacilityType::getCost(), type.FacilityType::getLifeQualityScore(), type.FacilityType::getEconomyScore(), type.FacilityType::getEnvironmentScore()){}
 
-// Ruls Of 3:
+Facility::Facility()
+: Facility(FacilityType(), ""){}
 
-// Copy-Constrector:
-Facility::Facility(Facility &other):
-FacilityType(other), settlementName(other.getSettlementName()),timeLeft(other.getTimeLeft()), status(other.getStatus())
-{}
+//Rule Of 3: Defult
 
-//Methods:
-
-const string &Facility::getSettlementName() const {
+//Method:
+const string &Facility::getSettlementName() const{
     return settlementName;
 }
 
-const int Facility::getTimeLeft() const {
+const int Facility::getTimeLeft() const{
     return timeLeft;
 }
 
 FacilityStatus Facility::step(){
-    FacilityStatus status = getStatus();
-    if (status == FacilityStatus::UNDER_CONSTRUCTIONS){
-    timeLeft -= 1;
-    }
-    if (timeLeft == 0){
-        setStatus(FacilityStatus:: OPERATIONAL);
+    if(timeLeft>0){
+        timeLeft=timeLeft-1;
+        if(timeLeft=0) {
+        setStatus(FacilityStatus::OPERATIONAL);
+        }
     }
     return status;
 }
-void Facility::setStatus(FacilityStatus status) {
-    this->status = status;
+
+void Facility::setStatus(FacilityStatus status){
+    this->status=status;
 }
 
-const FacilityStatus &Facility::getStatus() const {
+const FacilityStatus& Facility::getStatus() const{
     return status;
 }
 
-const string Facility::toString() const {
-    // FacilityStatus To String:
-    string statusString = "UNKNOWN_STATUS";
-    switch (this->getStatus()) {
-        case FacilityStatus::UNDER_CONSTRUCTIONS:
-            statusString = "UNDER_CONSTRUCTIONS";
-            break;
-        case FacilityStatus::OPERATIONAL:
-            statusString = "OPERATIONAL";
-            break;
-
-    }
-
-    std::string timeToString = std::to_string(this->getTimeLeft());
-
-    const string toString = "name: " + this->getName() + ", settlement name: " + this->getSettlementName() +
-    ", status: "+ statusString +", time left: "+ timeToString;
-    return toString;
+const string Facility::toString() const{
+    return "this is" + name + "in" + settlementName + "with" +  std::to_string(timeLeft) + "time left.";
 }
-
-
-

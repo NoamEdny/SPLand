@@ -18,7 +18,7 @@ class NaiveSelection: public SelectionPolicy {
 
         // Ruls Of 3:
         // Copy-Constrector:
-        NaiveSelection(const NaiveSelection &other);
+        NaiveSelection(const NaiveSelection &other) = default;
 
         //Destructor:
         ~NaiveSelection() override = default;
@@ -35,10 +35,11 @@ class BalancedSelection: public SelectionPolicy {
     public:
         //Constrector:
         BalancedSelection(int LifeQualityScore, int EconomyScore, int EnvironmentScore);
+        BalancedSelection();
 
         // Ruls Of 3:
         // Copy-Constrector:
-        BalancedSelection(const BalancedSelection &other);
+        BalancedSelection(const BalancedSelection &other) = default;
 
         //Destructor:
         ~BalancedSelection() override = default;
@@ -60,7 +61,7 @@ class EconomySelection: public SelectionPolicy {
 
         // Ruls Of 3:
         // Copy-Constrector:
-        EconomySelection(const EconomySelection &other);
+        EconomySelection(const EconomySelection &other) = default;
 
         //Destructor:
         ~EconomySelection() override = default;
@@ -82,7 +83,7 @@ class SustainabilitySelection: public SelectionPolicy {
 
         // Ruls Of 3:
         // Copy-Constrector:
-        SustainabilitySelection(const SustainabilitySelection &other);
+        SustainabilitySelection(const SustainabilitySelection &other) = default;
 
         //Destructor:
         ~SustainabilitySelection() override = default;

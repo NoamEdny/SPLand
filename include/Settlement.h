@@ -14,17 +14,26 @@ enum class SettlementType {
 
 class Settlement {
     public:
+    //Constructor
         Settlement(const string &name, SettlementType type);
 
-    // Copy Constructor
-    Settlement(const Settlement& other) = default;
+    //Rule Of 3:
+        // Copy-Constructor
+        Settlement(const Settlement& other) = default;
 
-    // Copy Assignment Operator
-    Settlement& operator=(const Settlement& other) = default;
+        // Copy Assignment Operator
+        Settlement& operator=(const Settlement& other) = default;
 
-    // Destructor
-    ~Settlement() = default;        const string &getName() const;
+        // Destructor
+        ~Settlement() = default;
+    
+    //metohds:
+        //geters: 
+        const string &getName() const;
         SettlementType getType() const;
+        int getCapacity() const;
+
+
         const string toString() const;
 
         private:

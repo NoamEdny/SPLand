@@ -15,14 +15,7 @@ using std::min;
 NaiveSelection::NaiveSelection() : lastSelectedIndex(-1) {}
 
 
-// Ruls Of 3:
-
-// Copy-Constrector:
-NaiveSelection:: NaiveSelection(const NaiveSelection &other) : lastSelectedIndex(other.lastSelectedIndex) {}
-
-
-
-//Copy -Opretor:
+// Ruls Of 3: Defult 
 
 //Methods:
 
@@ -50,15 +43,11 @@ NaiveSelection* NaiveSelection::clone() const {
 BalancedSelection::BalancedSelection(int LifeQualityScore, int EconomyScore, int EnvironmentScore) :
  LifeQualityScore(LifeQualityScore), EconomyScore(EconomyScore), EnvironmentScore(EnvironmentScore) {}
 
-// Ruls Of 3:
+//Constractor
+BalancedSelection::BalancedSelection() :
+BalancedSelection(0,0,0){}
 
-// Copy constactor
-BalancedSelection::BalancedSelection(const BalancedSelection &other) :
- LifeQualityScore(other.LifeQualityScore), EconomyScore(other.EconomyScore), EnvironmentScore(other.EnvironmentScore) {}
-
-//Destructor:
-/*BalancedSelection::~BalancedSelection() 
-{}*/
+// Ruls Of 3: Defult
 
 
 //Methods:
@@ -106,10 +95,7 @@ BalancedSelection* BalancedSelection::clone() const {
 //Constractor
 EconomySelection::EconomySelection() : lastSelectedIndex(-1) {}
 
-// Ruls Of 3:
-//Copy constractor
-EconomySelection::EconomySelection(const EconomySelection &other) : lastSelectedIndex(other.lastSelectedIndex) {}
-
+// Ruls Of 3: Defult
 
 //Methods:
 //selectFacility:
@@ -144,9 +130,7 @@ EconomySelection* EconomySelection :: clone() const {
 //Constractor
  SustainabilitySelection::SustainabilitySelection() : lastSelectedIndex(-1) {}
 
-// Ruls Of 3:
-//Copy constractor
-SustainabilitySelection::SustainabilitySelection(const SustainabilitySelection &other) : lastSelectedIndex(other.lastSelectedIndex) {}
+// Ruls Of 3: Defult 
 
 
 //Methods:

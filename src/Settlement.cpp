@@ -19,6 +19,21 @@ SettlementType Settlement:: getType() const
     return type;
 }
 
+int Settlement:: getCapacity() const{
+    int capacity;
+    switch (type) {
+        case SettlementType::VILLAGE:
+            capacity =1;
+            break;
+        case SettlementType::CITY:
+            capacity = 2;
+            break;
+        case SettlementType::METROPOLIS:
+            capacity = 3;
+            break;
+    }
+}
+
 const string Settlement:: toString() const
 {
     string result = "Settlement Name: " + name + ", Type: ";
