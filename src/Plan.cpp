@@ -8,7 +8,7 @@ using namespace std;
 // check the consractor (ettlement(const_cast<Settlement&>(settlement)))
 Plan::Plan(const int planId, const Settlement &settlement, SelectionPolicy *selectionPolicy, const vector<FacilityType> &facilityOptions) 
 : 
-plan_id(planId), settlement(const_cast<Settlement&>(settlement)), selectionPolicy(selectionPolicy), facilityOptions(facilityOptions), //from user
+plan_id(planId), settlement(const_cast<Settlement&>(settlement)), selectionPolicy(selectionPolicy->clone()), facilityOptions(facilityOptions), //from user
 status(PlanStatus::AVALIABLE), capacity(settlement.getCapacity()), //status
 facilities(), underConstruction(),//facility
 life_quality_score(0), economy_score(0), environment_score(0) {} //scores
@@ -40,6 +40,18 @@ Plan Plan::operator=(const Plan &other) const{
     
 }
 
+//Destructor
+Plan::~Plan(){
+    delete selectionPolicy;
+    for (Facility* facility : facilities) {
+        delete facility;
+    }
+    for (Facility* facility : underConstruction) {
+        delete facility;
+    }
+
+}
+
 
 //Methods:
 //geters:
@@ -60,9 +72,14 @@ const vector<Facility*> &Plan::getFacilities() const {
 }
 
 // Other methods:
-void Plan:: setSelectionPolicy(SelectionPolicy *selectionPolicy) {
-    this->selectionPolicy = selectionPolicy;
+void Plan::setSelectionPolicy(SelectionPolicy *newPolicy) {
+    if (selectionPolicy) { 
+        delete selectionPolicy; 
+    }  
+        selectionPolicy = newPolicy->clone(); 
+
 }
+
 
 void Plan::step() {
     // select Facility acording to the capacity and the selectionPolicy
@@ -70,7 +87,6 @@ void Plan::step() {
         FacilityType next = selectionPolicy->selectFacility(facilityOptions);
         Facility* nextFacility = new Facility(next, settlement.getName());// nextFacility is in the heap because we need it after the scope of "step()"
         addFacility(nextFacility);
-         
         capacity = capacity -1;
         if (capacity == 0)
         {
