@@ -20,7 +20,7 @@ SettlementType Settlement:: getType() const
 }
 
 int Settlement:: getCapacity() const{
-    int capacity;
+    int capacity = 0 ;
     switch (type) {
         case SettlementType::VILLAGE:
             capacity =1;
@@ -31,7 +31,10 @@ int Settlement:: getCapacity() const{
         case SettlementType::METROPOLIS:
             capacity = 3;
             break;
+        default:
+            break;
     }
+    return capacity;
 }
 
 const string Settlement:: toString() const

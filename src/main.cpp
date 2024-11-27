@@ -28,34 +28,36 @@ using namespace std;
 
 int main() {
  try {
-        // יצירת ישוב
+           // Creating a settlement
         Settlement city("TestCity", SettlementType::CITY);
         cout << "Settlement created: " << city.toString() << endl;
+        cout << "Capacity: " + std::to_string(city.getCapacity()) << endl;
 
-        // יצירת מתקנים
-        FacilityType school("School", FacilityCategory::LIFE_QUALITY, 3, 2, 1, 0);
+        // Creating facilities
+        FacilityType school("School", FacilityCategory::LIFE_QUALITY, 1, 2, 1, 0);
         FacilityType factory("Factory", FacilityCategory::ECONOMY, 5, 0, 3, 1);
         FacilityType park("Park", FacilityCategory::ENVIRONMENT, 4, 1, 0, 3);
+        cout << "FacilityType: " + std::to_string(factory.getCost()) << endl;
 
         vector<FacilityType> facilities = {school, factory, park};
 
-        // יצירת מדיניות בחירה נאיבית
+        // Creating a naive selection policy
         NaiveSelection naivePolicy;
-        // יצירת תוכנית עם הישוב והמדיניות
+        // Creating a plan with the settlement and policy
         Plan plan(1, city, &naivePolicy, facilities);
         cout << "\nPlan created:\n" << plan.toString() << endl;
 
-        // ביצוע שלב ראשון
+        // Executing the first step
         cout << "\nExecuting first step...\n";
         plan.step();
         cout << "Plan after first step:\n" << plan.toString() << endl;
 
-        // מעבר למדיניות בחירה מאוזנת
+        // Switching to a balanced selection policy
         BalancedSelection balancedPolicy;
         cout << "\nChanging selection policy to Balanced...\n";
         plan.setSelectionPolicy(&balancedPolicy);
 
-        // ביצוע שלב נוסף
+        // Executing another step
         cout << "\nExecuting second step...\n";
         plan.step();
         cout << "Plan after second step:\n" << plan.toString() << endl;

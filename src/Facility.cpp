@@ -1,9 +1,10 @@
 #include "Facility.h"
 #include <string>
 #include <vector>
+#include <iostream>
 using std::string;
 using std::vector;
-
+using namespace std;
 //***********************************************************************************************************
 
 //************************************************  FacilityType ************************************************
@@ -73,8 +74,9 @@ const int Facility::getTimeLeft() const{
 
 FacilityStatus Facility::step(){
     if(timeLeft>0){
-        timeLeft=timeLeft-1;
+        timeLeft = timeLeft-1;
         if(timeLeft=0) {
+        cout << "hiiii" << endl;
         setStatus(FacilityStatus::OPERATIONAL);
         }
     }
@@ -89,6 +91,25 @@ const FacilityStatus& Facility::getStatus() const{
     return status;
 }
 
+
+
 const string Facility::toString() const{
-    return "this is" + name + "in" + settlementName + "with" +  std::to_string(timeLeft) + "time left.";
+    return "Name: " + getName() + " , Status: " + statusToString() + " , Time left: " + std::to_string(timeLeft);
+}
+
+string Facility::statusToString() const{
+    string result;
+
+    // Convert SettlementType to string
+    switch (status) {
+        case FacilityStatus::UNDER_CONSTRUCTIONS :
+            result = "UNDER_CONSTRUCTIONS";
+            break;
+        case FacilityStatus::OPERATIONAL:
+            result = "OPERATIONAL";
+            break;
+
+    }
+
+    return result;
 }

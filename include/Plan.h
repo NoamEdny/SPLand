@@ -19,12 +19,10 @@ class Plan {
         // Copy-Constructor
         Plan(const Plan &other);
         //vector<Facility*>* cloneFacilitys(const vector<Facility*> &other);
-
-        // Copy Assignment Operator
-        Plan operator=(const Plan &other) const;
         
         // Destructor
         ~Plan();
+
     //Methodes:
         //geters:
         const int getlifeQualityScore() const;
@@ -38,6 +36,7 @@ class Plan {
         void addFacility(Facility* facility);
         const string toString() const;
         string statusToString() const;
+        string facilitiesToString() const;
 
     private:
         int plan_id;

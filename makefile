@@ -1,22 +1,37 @@
+# Compiler and flags
 CXX = g++
-CXXFLAGS = -std=c++17 -Wall -g -Iinclude
-SRC_DIR = src
-OBJ_DIR = obj
-BIN_DIR = bin
-TARGET = $(BIN_DIR)/simulation
+CXXFLAGS = -g -Wall -Weffc++ -std=c++17 -Iinclude
 
-SRC_FILES = $(wildcard $(SRC_DIR)/*.cpp)
-OBJ_FILES = $(patsubst $(SRC_DIR)/%.cpp, $(OBJ_DIR)/%.o, $(SRC_FILES))
+# Directories
+SRCDIR = src
+OBJDIR = obj
+BINDIR = bin
 
+# Target program
+TARGET = $(BINDIR)/program
+
+# Source and object files
+SRCS = $(SRCDIR)/main.cpp $(SRCDIR)/Settlement.cpp $(SRCDIR)/Facility.cpp \
+       $(SRCDIR)/SelectionPolicy.cpp $(SRCDIR)/Plan.cpp
+OBJS = $(patsubst $(SRCDIR)/%.cpp, $(OBJDIR)/%.o, $(SRCS))
+
+# Default target
 all: $(TARGET)
 
-$(TARGET): $(OBJ_FILES)
-	@mkdir -p $(BIN_DIR)
-	$(CXX) $(CXXFLAGS) $^ -o $@
+# Link the program
+$(TARGET): $(OBJS)
+	@mkdir -p $(BINDIR)
+	$(CXX) $(CXXFLAGS) -o $@ $(OBJS)
 
-$(OBJ_DIR)/%.o: $(SRC_DIR)/%.cpp
-	@mkdir -p $(OBJ_DIR)
+# Compile object files
+$(OBJDIR)/%.o: $(SRCDIR)/%.cpp
+	@mkdir -p $(OBJDIR)
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 
+# Clean up build files
 clean:
-	rm -rf $(OBJ_DIR) $(BIN_DIR)
+	@echo "Cleaning up..."
+	rm -rf $(OBJDIR) $(BINDIR)
+
+# Phony targets
+.PHONY: all clean

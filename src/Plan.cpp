@@ -35,10 +35,7 @@ Plan::Plan(const Plan &other)
     }
 }
 
-// Copy Assignment Operator
-Plan Plan::operator=(const Plan &other) const{
-    
-}
+// Copy Assignment Operator: in this case we don't need becuse settlement is const
 
 //Destructor
 Plan::~Plan(){
@@ -99,12 +96,28 @@ void Plan::step() {
         for (auto it = underConstruction.begin(); it != underConstruction.end(); ) {
         Facility* facilityToBuild = *it;
         FacilityStatus newStatus = facilityToBuild->step();
+        cout << facilityToBuild->toString() << endl;
         if (newStatus == FacilityStatus::OPERATIONAL) {
             addFacility(facilityToBuild);
+            
+            //Update the scores:
+            life_quality_score += facilityToBuild->getLifeQualityScore();
+            economy_score += facilityToBuild->getEconomyScore();
+            environment_score += facilityToBuild->getEnvironmentScore();
+            capacity = capacity + 1; // Now we can build one more facility 
+
             it = underConstruction.erase(it); // delete the arry element (no need to delete facilityToBuild becsue it's in facilities)
-        } else {
+            
+        }
+         else {
             ++it; // iteret to the next element
         }
+
+        //Update the status:
+        if (capacity != 0)
+        {
+            status = PlanStatus::AVALIABLE;
+        } 
     }
     } 
 }
@@ -136,8 +149,11 @@ const string Plan::toString() const {
     string output;
     output = "ID: " + std::to_string(plan_id) + "\n" + 
              "Plan Status: " + statusToString() + "\n" +
-             "Settlement Name: " + settlement.getName();
-
+             "Settlement Name: " + settlement.getName() + "\n" +
+             "Capacity: " + std::to_string(capacity) + "\n"  +
+             "Life quality score: " +  std::to_string(life_quality_score) + " , Economy score: " +  std::to_string(economy_score) +
+             " , Environment score" +  std::to_string(environment_score) + "\n" +
+            facilitiesToString() + "\n";
     return output;
 }
 
@@ -153,5 +169,21 @@ string Plan::statusToString() const{
     }
     return statusString;
 }
+
+string Plan::facilitiesToString() const {
+    //Operational facilities
+    string toString = "Operational facilities: ";
+    for (Facility* facility : facilities) {
+        toString += facility->getName() + ", ";
+    }
+    //Under construction facilities
+    toString += "\nUnder construction facilities: ";
+    for (Facility* facility : underConstruction) {
+        toString += facility->getName() + ", ";
+    }
+    return toString;
+}
+
+
 
 
