@@ -1,5 +1,7 @@
 #include "Action.h"
-
+#include <iostream>
+using namespace std;
+using std::string;
 
 //***********************************************************************************************************
 
@@ -23,7 +25,7 @@ void SimulateStep::act(Simulation &simulation) {
  }
 
  const string SimulateStep::toString() const{
-    return "SimulateStep: " + std::to_string(numOfSteps);
+    return "Step: " + std::to_string(numOfSteps);
  }
 
  SimulateStep *SimulateStep::clone() const{
@@ -38,25 +40,63 @@ void SimulateStep::act(Simulation &simulation) {
 AddPlan::AddPlan(const string &settlementName, const string &selectionPolicy):
  settlementName(settlementName), selectionPolicy(selectionPolicy){}
 
+//Methods:
 void AddPlan::act(Simulation &simulation){
     SelectionPolicy *newPolicy;
-    if (selectionPolicy == "nve"){
+    if(!(selectionPolicy == "nve" ||  selectionPolicy == "bal" || selectionPolicy == "eco" || selectionPolicy == "env") // selectionPolicy is legal
+     || !simulation.isSettlementExists(settlementName)) //settlementName is not in the settlements in the Simulation
+     {
+        error("Can't create this plan :(");
+     }
+    else if (selectionPolicy == "nve"){
         newPolicy = new NaiveSelection();
-        simulation.addPlan(simulation.getSettlement(settlementName), newPolicy);
     }
     else if(selectionPolicy == "bal"){
         newPolicy = new BalancedSelection();
-        simulation.addPlan(simulation.getSettlement(settlementName), newPolicy);
     }
     else if (selectionPolicy == "eco"){
         newPolicy = new EconomySelection();
-        simulation.addPlan(simulation.getSettlement(settlementName), newPolicy);
     }
     else if(selectionPolicy == "env"){
         newPolicy = new SustainabilitySelection();
-        simulation.addPlan(simulation.getSettlement(settlementName), newPolicy);
+    }
+    simulation.addPlan(simulation.getSettlement(settlementName), newPolicy);
+    complete();
+}
+
+const string AddPlan::toString() const{
+    return "Plan: " + settlementName + selectionPolicy;
+}
+
+AddPlan *AddPlan::clone() const{
+    return new AddPlan(*this);
+}
+
+//***********************************************************************************************************
+
+//************************************************ AddSettlement ************************************************
+
+//Constractor:
+AddSettlement::AddSettlement(const string &settlementName,SettlementType settlementType):
+settlementName(settlementName), settlementType(settlementType){}
+
+//Methods:
+void AddSettlement::act(Simulation &simulation){
+    if(simulation.isSettlementExists(settlementName)){
+        error("Settelment alredy exists");
     }
     else{
-        error("no legal selection policy string :(");
+        Settlement *newSettlment = new Settlement(settlementName,settlementType);
+        simulation.addSettlement(newSettlment);
     }
 }
+
+const string AddSettlement::toString() const{
+    return "Settlement: " + settlementName + " " + std::to_string(static_cast<int>(settlementType));
+}
+
+AddSettlement *AddSettlement::clone() const{
+    return new AddSettlement(*this);
+}
+
+

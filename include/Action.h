@@ -30,7 +30,7 @@ class BaseAction{
 
 class SimulateStep : public BaseAction {
 
-    public:
+    public: 
         SimulateStep(const int numOfSteps);
         SimulateStep();
         SimulateStep(const SimulateStep &other) = default;
@@ -44,6 +44,7 @@ class SimulateStep : public BaseAction {
 class AddPlan : public BaseAction {
     public:
         AddPlan(const string &settlementName, const string &selectionPolicy);
+        AddPlan(const AddPlan &other) = default;
         AddPlan() = default;
         void act(Simulation &simulation) override;
         const string toString() const override;
