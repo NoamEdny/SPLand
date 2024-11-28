@@ -21,6 +21,8 @@ class Simulation {
         bool isSettlementExists(const string &settlementName);
         Settlement &getSettlement(const string &settlementName);
         Plan &getPlan(const int planID);
+        int getPlanCounter();
+        vector<Plan> &getPlans();
         void step();
         void close();
         void open();
@@ -31,6 +33,6 @@ class Simulation {
         vector<BaseAction*> actionsLog;
         vector<Plan> plans;
         vector<Settlement*> settlements;
-        vector<FacilityType> facilitiesOptions;
+        vector<FacilityType> facilitiesOptions; 
 
 };

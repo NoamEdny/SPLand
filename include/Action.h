@@ -32,6 +32,8 @@ class SimulateStep : public BaseAction {
 
     public:
         SimulateStep(const int numOfSteps);
+        SimulateStep();
+        SimulateStep(const SimulateStep &other) = default;
         void act(Simulation &simulation) override;
         const string toString() const override;
         SimulateStep *clone() const override;
@@ -42,6 +44,7 @@ class SimulateStep : public BaseAction {
 class AddPlan : public BaseAction {
     public:
         AddPlan(const string &settlementName, const string &selectionPolicy);
+        AddPlan() = default;
         void act(Simulation &simulation) override;
         const string toString() const override;
         AddPlan *clone() const override;

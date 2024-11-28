@@ -75,8 +75,8 @@ const int Facility::getTimeLeft() const{
 FacilityStatus Facility::step(){
     if(timeLeft>0){
         timeLeft = timeLeft-1;
-        if(timeLeft=0) {
-        cout << "hiiii" << endl;
+        if(timeLeft==0) {
+        //cout << "hiiii" << endl;
         setStatus(FacilityStatus::OPERATIONAL);
         }
     }

@@ -8,7 +8,7 @@ using namespace std;
 // check the consractor (ettlement(const_cast<Settlement&>(settlement)))
 Plan::Plan(const int planId, const Settlement &settlement, SelectionPolicy *selectionPolicy, const vector<FacilityType> &facilityOptions) 
 : 
-plan_id(planId), settlement(const_cast<Settlement&>(settlement)), selectionPolicy(selectionPolicy->clone()), facilityOptions(facilityOptions), //from user
+plan_id(planId), settlement(const_cast<Settlement&>(settlement)), selectionPolicy(selectionPolicy), facilityOptions(facilityOptions), //from user
 status(PlanStatus::AVALIABLE), capacity(settlement.getCapacity()), //status
 facilities(), underConstruction(),//facility
 life_quality_score(0), economy_score(0), environment_score(0) {} //scores
@@ -70,10 +70,10 @@ const vector<Facility*> &Plan::getFacilities() const {
 
 // Other methods:
 void Plan::setSelectionPolicy(SelectionPolicy *newPolicy) {
-    if (selectionPolicy) { 
+    if (selectionPolicy != nullptr) { 
         delete selectionPolicy; 
     }  
-        selectionPolicy = newPolicy->clone(); 
+        selectionPolicy = newPolicy; 
 
 }
 
@@ -95,8 +95,9 @@ void Plan::step() {
     {
         for (auto it = underConstruction.begin(); it != underConstruction.end(); ) {
         Facility* facilityToBuild = *it;
+        //cout << facilityToBuild->toString() << endl;
         FacilityStatus newStatus = facilityToBuild->step();
-        cout << facilityToBuild->toString() << endl;
+        //cout << facilityToBuild->toString() << endl;
         if (newStatus == FacilityStatus::OPERATIONAL) {
             addFacility(facilityToBuild);
             
@@ -152,7 +153,7 @@ const string Plan::toString() const {
              "Settlement Name: " + settlement.getName() + "\n" +
              "Capacity: " + std::to_string(capacity) + "\n"  +
              "Life quality score: " +  std::to_string(life_quality_score) + " , Economy score: " +  std::to_string(economy_score) +
-             " , Environment score" +  std::to_string(environment_score) + "\n" +
+             " , Environment score: " +  std::to_string(environment_score) + "\n" +
             facilitiesToString() + "\n";
     return output;
 }
@@ -183,6 +184,8 @@ string Plan::facilitiesToString() const {
     }
     return toString;
 }
+
+
 
 
 

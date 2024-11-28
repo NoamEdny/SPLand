@@ -53,7 +53,7 @@ int main() {
         cout << "Plan after first step:\n" << plan.toString() << endl;
 
         // Switching to a balanced selection policy
-        BalancedSelection balancedPolicy;
+        BalancedSelection balancedPolicy(plan.getlifeQualityScore(),plan.getEconomyScore(), plan.getEnvironmentScore());
         cout << "\nChanging selection policy to Balanced...\n";
         plan.setSelectionPolicy(&balancedPolicy);
 
