@@ -20,9 +20,11 @@ class Simulation {
         bool addFacility(FacilityType facility);
         bool isSettlementExists(const string &settlementName);
         Settlement &getSettlement(const string &settlementName);
+        SelectionPolicy *getSelectionPolicy (const string &selectionPolicy);
         Plan &getPlan(const int planID);
         int getPlanCounter();
         vector<Plan> &getPlans();
+        int getPlanCounter();
         void step();
         void close();
         void open();
