@@ -6,49 +6,55 @@
 using namespace std;
 
 Simulation::Simulation(const string &configFilePath)
-    : isRunning(false), planCounter(0) // אתחול ברירת מחדל
+    : isRunning(false), planCounter(0) // Default initialization
 {
     ifstream configFile(configFilePath);
 
     string line;
     while (getline(configFile, line)) {
-        // דלג על שורות ריקות או הערות
+        // Skip empty lines or comments
         if (line.empty() || line[0] == '#') {
             continue;
         }
-        // נתח את השורה
+        // Parse the line
         vector<string> tokens = Auxiliary::parseArguments(line);
 
-        // עיבוד לפי סוג השורה
+        // Process based on the type of the line
         if (tokens[0] == "settlement") {
             addSettlement(new Settlement(tokens[1], static_cast<SettlementType>(stoi(tokens[2]))));
         } else if (tokens[0] == "facility") {
             addFacility(FacilityType(tokens[1], static_cast<FacilityCategory>(stoi(tokens[2])),
                 stoi(tokens[3]), stoi(tokens[4]), stoi(tokens[5]), stoi(tokens[6])));
         } else if (tokens[0] == "plan") {
-            addPlan(getSettlement(tokens[1]), getSelectionPolicy(tokens[2]));
+            addPlan(getSettlement(tokens[1]), getSelectionPolicy(tokens[2])); //"getSelectionPolicy" cerate a new SelectionPolic - it's going to be deletad by the destrector of the plan
         }
     }
     configFile.close();
 }
+
 void Simulation::start(){
-     isRunning = true; // מסמן שהסימולציה פועלת
+    isRunning = true; // Indicates that the simulation is running
     cout << "Simulation started!" << endl;
 
-     while (isRunning) {
+    while (isRunning) {
         string line;
         cin >> line;
 
         vector<string> tokens = Auxiliary::parseArguments(line);
-         if (tokens[0] == "settlement") {
-            BaseAction *newSettelment = new AddSettlement(tokens[1], static_cast<SettlementType>(stoi(tokens[2])));
-            
-        } else if (tokens[0] == "facility") {
-            addFacility(FacilityType(tokens[1], static_cast<FacilityCategory>(stoi(tokens[2])),
-                stoi(tokens[3]), stoi(tokens[4]), stoi(tokens[5]), stoi(tokens[6])));
-        } else if (tokens[0] == "plan") {
+        if (tokens[0] == "settlement") {
+            BaseAction *newSettlement = new AddSettlement(tokens[1], static_cast<SettlementType>(stoi(tokens[2])));
+            newSettlement->act(*this);
+            addAction(newSettlement);
+        } 
+        else if (tokens[0] == "facility") {
+            BaseAction *newFacility = new AddFacility(tokens[1], static_cast<FacilityCategory>(stoi(tokens[2])), stoi(tokens[3]),
+            stoi(tokens[3]),stoi(tokens[4]),stoi(tokens[5]));
+        } 
+        else if (tokens[0] == "plan") {
             addPlan(getSettlement(tokens[1]), getSelectionPolicy(tokens[2]));
+        } 
+        else if (tokens[0] == "step") {
+        // Placeholder for additional conditions
         }
-        else if ()
-     }
+    }
 }

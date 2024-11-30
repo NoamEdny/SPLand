@@ -56,7 +56,9 @@ Facility::Facility(const string &name, const string &settlementName, const Facil
     timeLeft(price){}
 
 Facility::Facility(const FacilityType &type, const string &settlementName)
-    :Facility(type.FacilityType::getName(), settlementName, type.FacilityType::getCategory(), type.FacilityType::getCost(), type.FacilityType::getLifeQualityScore(), type.FacilityType::getEconomyScore(), type.FacilityType::getEnvironmentScore()){}
+    :Facility(type.FacilityType::getName(), settlementName, type.FacilityType::getCategory(), 
+    type.FacilityType::getCost(), type.FacilityType::getLifeQualityScore(), type.FacilityType::getEconomyScore(),
+     type.FacilityType::getEnvironmentScore()){}
 
 Facility::Facility()
 : Facility(FacilityType(), ""){}

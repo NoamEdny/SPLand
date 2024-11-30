@@ -30,7 +30,7 @@ class BaseAction{
 
 class SimulateStep : public BaseAction {
 
-    public: 
+    public:  
         SimulateStep(const int numOfSteps);
         SimulateStep();
         SimulateStep(const SimulateStep &other) = default;
