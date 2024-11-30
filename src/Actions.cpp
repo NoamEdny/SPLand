@@ -64,7 +64,7 @@ AddPlan::AddPlan(const string &settlementName, const string &selectionPolicy):
 
 //Methods:
 void AddPlan::act(Simulation &simulation){
-    if (selectionPolicy == "nve" || selectionPolicy == "bal" || selectionPolicy == "eco" || selectionPolicy ){
+    if (selectionPolicy != "nve" && selectionPolicy != "bal" && selectionPolicy == "eco" && selectionPolicy != "env"){
         error("Cannot creat this plan");
     }
     else {
@@ -173,13 +173,15 @@ void PrintPlanStatus::act(Simulation &simulation) {
 
 void ChangePlanPolicy::act(Simulation &simulation) {
     if (simulation.getPlanCounter() < planId || simulation.getPlan(planId).getSelectionPolicy() ==  newPolicy) {
-        error ("Cannot change selection policy")
+        error ("Cannot change selection policy");
     }
     else {
         Plan currentPlan = simulation.getPlan(planId);
         currentPlan.setSelectionPolicy(simulation.getSelectionPolicy(newPolicy, currentPlan.getlifeQualityScore(), currentPlan.getEconomyScore(), currentPlan.getEnvironmentScore()));
     }
 }
+
+
 
 
 

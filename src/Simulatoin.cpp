@@ -35,7 +35,7 @@ Simulation::Simulation(const string &configFilePath)
 }
 
 
-//Rule Of 3:
+//Rule Of 5:
 // Copy-Constructor:
 Simulation::Simulation(const Simulation &other){
     //actionsLog:
