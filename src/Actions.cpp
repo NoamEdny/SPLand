@@ -169,18 +169,109 @@ void PrintPlanStatus::act(Simulation &simulation) {
 //************************************************ ChangePlanPolicy ************************************************
 
 //Constractor
- ChangePlanPolicy::ChangePlanPolicy(const int planId, const string &newPolicy) : planId(planId), newPolicy(newPolicy) {}
+ ChangePlanPolicy::ChangePlanPolicy(const int planId, const string &newPolicy) : planId(planId), newPolicy(newPolicy), oldPolicy("") {}
 
 void ChangePlanPolicy::act(Simulation &simulation) {
     if (simulation.getPlanCounter() < planId || simulation.getPlan(planId).getSelectionPolicy() ==  newPolicy) {
-        error ("Cannot change selection policy")
+        error("Cannot change selection policy");
+    } else {
+        Plan &currentPlan = simulation.getPlan(planId);
+        string oldPolicy = currentPlan.getSelectionPolicy();
+        simulation.setSelectionPolicy(newPolicy, planId);
+        complete();
     }
-    else {
-        Plan currentPlan = simulation.getPlan(planId);
-        currentPlan.setSelectionPolicy(getSelectionPolicy(newPolicy), currentPlan.getlifeQualityScore(), currentPlan.getEconomyScore(), currentPlan.getEnvironmentScore())
-    }
+}
+ const string ChangePlanPolicy::toString() const {
+    return "PlanID: " + std::to_string(planId) + 
+           ", previousPolicy: " + oldPolicy + 
+           ", newPolicy: " + newPolicy + 
+           ", status: " + statusToString(getStatus());
 }
 
 
+ ChangePlanPolicy *ChangePlanPolicy::clone() const {
+        return new ChangePlanPolicy(*this);
+     }
+
+ //***********************************************************************************************************
+
+//************************************************ PrintActionsLog ************************************************
+//Constractor
+PrintActionsLog::PrintActionsLog(){}
+
+void PrintActionsLog::act(Simulation &simulation) {
+    for (BaseAction* action : simulation.getActionsLog()) {
+        std::cout << action->toString() << std::endl;
+    }
+    complete();
+}
+
+PrintActionsLog *PrintActionsLog::clone() const {
+    return new PrintActionsLog(*this);
+}
+
+const string PrintActionsLog::toString() const {
+    return "log " + statusToString(getStatus());
+}
+
+//***********************************************************************************************************
+
+//************************************************ Close ************************************************
+//Constractor
+Close::Close() {}
+
+void Close::act(Simulation &simulation){
+    simulation.close();
+    complete();
+}
+
+Close *Close::clone() const {
+    return new Close(*this);
+}
+
+const string Close::toString() const {
+    return "close " + statusToString(getStatus());
+}
 
 
+//***********************************************************************************************************
+
+//************************************************ BackupSimulation ************************************************
+//Constractor
+BackupSimulation::BackupSimulation() {}
+
+void BackupSimulation::act(Simulation &simulation){
+    
+
+
+    complete();
+}
+
+BackupSimulation *BackupSimulation::clone() const {
+    return new BackupSimulation(*this);
+}
+
+const string BackupSimulation::toString() const {
+    return "extern " + statusToString(getStatus());
+}
+
+//***********************************************************************************************************
+
+//************************************************ RestoreSimulation ************************************************
+//Constractor
+RestoreSimulation::RestoreSimulation() {}
+
+void RestoreSimulation::act(Simulation &simulation){
+    
+
+
+    complete();
+}
+
+RestoreSimulation *RestoreSimulation::clone() const {
+    return new RestoreSimulation(*this);
+}
+
+const string RestoreSimulation::toString() const {
+    return "restore " + statusToString(getStatus());
+}

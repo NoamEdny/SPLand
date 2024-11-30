@@ -19,8 +19,6 @@ class Simulation {
     //Rule Of 3:
         // Copy-Constructor:
         Simulation(const Simulation &other);
-
-        
         void start();  
         void addPlan(const Settlement &settlement, SelectionPolicy *selectionPolicy);
         void addAction(BaseAction *action); //TO DO
@@ -30,8 +28,10 @@ class Simulation {
         Settlement &getSettlement(const string &settlementName);
         SelectionPolicy *getSelectionPolicy (const string &selectionPolicy);
         SelectionPolicy *getSelectionPolicy (const string &selectionPolicy, int LifeQualityScore, int EconomyScore, int EnvironmentScore);
+        void setSelectionPolicy  (const string &selectionPolicy, int planID);
         int getPlanCounter() const;
         Plan &getPlan(const int planID);
+        vector<BaseAction*> getActionsLog();
         void step();
         void close();
         void open();
@@ -42,6 +42,6 @@ class Simulation {
         vector<BaseAction*> actionsLog;
         vector<Plan> plans;
         vector<Settlement*> settlements;
-        vector<FacilityType> facilitiesOptions; 
-
+        vector<FacilityType> facilitiesOptions;
+//where we are pushing the actions in to log
 };

@@ -207,3 +207,28 @@ void Simulation::open(){
     isRunning - true;
     cout << "Simulation started!" << endl;
 }
+
+void Simulation::setSelectionPolicy(const string &selectionPolicy, int planID) {
+    Plan &plan = getPlan(planID); // שימוש בהפניה כדי לעדכן ישירות את התוכנית
+    SelectionPolicy *policy = nullptr;
+
+    if (selectionPolicy == "Naive") {
+        policy = new NaiveSelection();
+    } else if (selectionPolicy == "Balanced") {
+        policy = new BalancedSelection(plan.getlifeQualityScore(), plan.getEconomyScore(), plan.getEnvironmentScore());
+    } else if (selectionPolicy == "Economy") {
+        policy = new EconomySelection();
+    } else if (selectionPolicy == "Sustainability") {
+        policy = new SustainabilitySelection();
+    }
+
+    if (policy) {
+        plan.setSelectionPolicy(policy); 
+    } else {
+        throw runtime_error("Invalid selection policy");
+    }
+}
+
+vector<BaseAction*> Simulation::getActionsLog(){
+    return actionsLog;
+}
