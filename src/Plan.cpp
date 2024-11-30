@@ -184,6 +184,10 @@ string Plan::facilitiesToString() const {
     return toString;
 }
 
+string Plan::getSelectionPolicy () const{
+    return selectionPolicy->toString();
+}
+
 
 
 

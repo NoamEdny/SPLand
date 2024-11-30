@@ -26,7 +26,7 @@ const FacilityType& NaiveSelection::selectFacility(const std::vector<FacilityTyp
 }
 //toString:
 const string NaiveSelection::toString() const{
-    return "Naive";
+    return "nve";
 }
 
 //clone
@@ -34,9 +34,6 @@ NaiveSelection* NaiveSelection::clone() const {
     return new NaiveSelection(*this);
 }
 
-string NaiveSelection::getSelectType() const{
-    return "nve";
-} 
 
 
 //***********************************************************************************************************
@@ -84,17 +81,13 @@ const FacilityType& BalancedSelection::selectFacility(const vector<FacilityType>
 
 //toString:
 const string BalancedSelection::toString() const {
-    return "Balanced";
+    return "bal";
 }
 
 //clone:
 BalancedSelection* BalancedSelection::clone() const {
     return new BalancedSelection(*this);
 }
-
-string BalancedSelection::getSelectType() const{
-    return "bal";
-} 
 
 
 
@@ -124,7 +117,7 @@ const FacilityType& EconomySelection::selectFacility(const vector<FacilityType>&
 
 //toString
  const string EconomySelection::toString() const {
-    return "Economy";
+    return "eco";
 }
 
 //clone
@@ -132,9 +125,6 @@ EconomySelection* EconomySelection :: clone() const {
     return new EconomySelection(*this);
 }
 
-string EconomySelection::getSelectType() const{
-    return "eco";
-} 
 
 
 //***********************************************************************************************************
@@ -163,7 +153,7 @@ const FacilityType& SustainabilitySelection::selectFacility(const vector<Facilit
 //toString
 
 const string SustainabilitySelection::toString() const {
-    return "Sustainability";
+    return "env";
 }
 
 
@@ -172,9 +162,6 @@ SustainabilitySelection* SustainabilitySelection :: clone() const {
     return new SustainabilitySelection(*this);
 }
 
-string EconomySelection::getSelectType() const{
-    return "env";
-} 
 
 
 

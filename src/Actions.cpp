@@ -64,7 +64,7 @@ AddPlan::AddPlan(const string &settlementName, const string &selectionPolicy):
 
 //Methods:
 void AddPlan::act(Simulation &simulation){
-    if (!simulation.isSettlementExists(settlementName)){
+    if (selectionPolicy == "nve" || selectionPolicy == "bal" || selectionPolicy == "eco" || selectionPolicy ){
         error("Cannot creat this plan");
     }
     else {
@@ -177,7 +177,7 @@ void ChangePlanPolicy::act(Simulation &simulation) {
     }
     else {
         Plan currentPlan = simulation.getPlan(planId);
-        currentPlan.setSelectionPolicy(getSelectionPolicy(newPolicy), currentPlan.getlifeQualityScore(), currentPlan.getEconomyScore(), currentPlan.getEnvironmentScore())
+        currentPlan.setSelectionPolicy(simulation.getSelectionPolicy(newPolicy, currentPlan.getlifeQualityScore(), currentPlan.getEconomyScore(), currentPlan.getEnvironmentScore()));
     }
 }
 
