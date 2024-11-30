@@ -48,18 +48,6 @@ void AddPlan::act(Simulation &simulation){
      {
         error("Can't create this plan :(");
      }
-    else if (selectionPolicy == "nve"){
-        newPolicy = new NaiveSelection();
-    }
-    else if(selectionPolicy == "bal"){
-        newPolicy = new BalancedSelection();
-    }
-    else if (selectionPolicy == "eco"){
-        newPolicy = new EconomySelection();
-    }
-    else if(selectionPolicy == "env"){
-        newPolicy = new SustainabilitySelection();
-    }
     simulation.addPlan(simulation.getSettlement(settlementName), newPolicy);
     complete();
 }
