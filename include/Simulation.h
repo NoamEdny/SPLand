@@ -42,6 +42,6 @@ class Simulation {
         vector<BaseAction*> actionsLog;
         vector<Plan> plans;
         vector<Settlement*> settlements;
-        vector<FacilityType> facilitiesOptions; 
+        vector<FacilityType> facilitiesOptions; 
 
 };

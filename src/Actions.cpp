@@ -3,6 +3,32 @@
 using namespace std;
 using std::string;
 
+ActionStatus BaseAction::getStatus() const {
+    return status;
+}
+
+void BaseAction::complete() {
+    status = ActionStatus::COMPLETED;
+}
+
+void BaseAction::error(string errorMsg){
+    status = ActionStatus::ERROR;
+    cout << errorMsg << endl;
+}
+
+string BaseAction::statusToString(ActionStatus status) const{
+    string result;
+    switch (status) {
+        case ActionStatus::COMPLETED:
+            result = "COMPLETED";
+            break;
+        case ActionStatus::ERROR:
+            result = "ERROR";
+            break;
+    }
+    return result;
+}
+
 //***********************************************************************************************************
 
 //************************************************  SimulateStep ************************************************
@@ -14,18 +40,14 @@ SimulateStep::SimulateStep() : numOfSteps(1) {}
 
 void SimulateStep::act(Simulation &simulation) {
     //Iterete thro all curent plans
-    for (int id =0; id < simulation.getPlanCounter(); id++){
-        Plan &plan = simulation.getPlan(id); //using & because we want to change the plan in the simulation
-        //Step each plan numOfSteps:
-        for(int i = 0; i < numOfSteps; i++){
-            plan.step();
+    for (int i =0; i < numOfSteps; i++){
+        simulation.step();
         }
-    }
     complete();
  }
 
  const string SimulateStep::toString() const{
-    return "Step: " + std::to_string(numOfSteps);
+    return "Step: " + std::to_string(numOfSteps) + statusToString(getStatus());
  }
 
  SimulateStep *SimulateStep::clone() const{
@@ -42,18 +64,17 @@ AddPlan::AddPlan(const string &settlementName, const string &selectionPolicy):
 
 //Methods:
 void AddPlan::act(Simulation &simulation){
-    SelectionPolicy *newPolicy;
-    if(!(selectionPolicy == "nve" ||  selectionPolicy == "bal" || selectionPolicy == "eco" || selectionPolicy == "env") // selectionPolicy is legal
-     || !simulation.isSettlementExists(settlementName)) //settlementName is not in the settlements in the Simulation
-     {
-        error("Can't create this plan :(");
-     }
-    simulation.addPlan(simulation.getSettlement(settlementName), newPolicy);
-    complete();
+    if (!simulation.isSettlementExists(settlementName)){
+        error("Cannot creat this plan");
+    }
+    else {
+        simulation.addPlan(simulation.getSettlement(settlementName), simulation.getSelectionPolicy(selectionPolicy));
+         complete();
+    }
 }
 
 const string AddPlan::toString() const{
-    return "Plan: " + settlementName + selectionPolicy;
+    return "Plan: " + settlementName + selectionPolicy + statusToString(getStatus());
 }
 
 AddPlan *AddPlan::clone() const{
@@ -74,17 +95,92 @@ void AddSettlement::act(Simulation &simulation){
         error("Settelment alredy exists");
     }
     else{
-        Settlement *newSettlment = new Settlement(settlementName,settlementType);
-        simulation.addSettlement(newSettlment);
+       simulation.addSettlement(new Settlement(settlementName, settlementType));
+        complete();
     }
 }
 
 const string AddSettlement::toString() const{
-    return "Settlement: " + settlementName + " " + std::to_string(static_cast<int>(settlementType));
+    return "Settlement: " + settlementName + " " + std::to_string(static_cast<int>(settlementType)) + statusToString(getStatus());
 }
 
 AddSettlement *AddSettlement::clone() const{
     return new AddSettlement(*this);
 }
+
+
+//***********************************************************************************************************
+
+//************************************************ AddFacility ************************************************
+
+//Constractor:
+AddFacility::AddFacility(const string &facilityName, const FacilityCategory facilityCategory, 
+const int price, const int lifeQualityScore, const int economyScore, const int environmentScore) : 
+facilityName(facilityName), facilityCategory(facilityCategory), price(price), lifeQualityScore(lifeQualityScore), 
+economyScore(economyScore), environmentScore(environmentScore) {}
+
+//Methods:
+void AddFacility::act(Simulation &simulation){
+    if (simulation.addFacility(FacilityType(facilityName, facilityCategory, price, lifeQualityScore, economyScore, environmentScore))){
+            complete();
+    }
+    else {
+        error ("Facility already exist");
+    }
+}
+const string AddFacility::toString() const{
+        return "facility " + facilityName + " " + std::to_string(static_cast<int>(facilityCategory)) 
+        +"price"+ std::to_string(price) +" " + std::to_string(lifeQualityScore) +" " + std::to_string(economyScore) +
+         " " + std::to_string(environmentScore) + statusToString(getStatus());
+}
+AddFacility *AddFacility::clone() const{
+    return new AddFacility(*this);
+}
+
+//***********************************************************************************************************
+
+//************************************************ PrintPlanStatus ************************************************
+
+//Constractor
+PrintPlanStatus::PrintPlanStatus(int planId) : planId(planId) {}
+
+//Methods:
+void PrintPlanStatus::act(Simulation &simulation) {
+    if (simulation.getPlanCounter() < planId) {
+        error ("Plan doesn't exist");
+    }
+    else {
+        Plan p = simulation.getPlan(planId);
+        cout << p.toString() << endl;
+        complete();
+    }
+}
+     PrintPlanStatus *PrintPlanStatus::clone() const {
+        return new PrintPlanStatus(*this);
+     }
+
+     const string PrintPlanStatus::toString() const {
+        return "planStatus " + planId + statusToString(getStatus());
+
+     }
+
+//***********************************************************************************************************
+
+//************************************************ ChangePlanPolicy ************************************************
+
+//Constractor
+ ChangePlanPolicy::ChangePlanPolicy(const int planId, const string &newPolicy) : planId(planId), newPolicy(newPolicy) {}
+
+void ChangePlanPolicy::act(Simulation &simulation) {
+    if (simulation.getPlanCounter() < planId || simulation.getPlan(planId).getSelectionPolicy() ==  newPolicy) {
+        error ("Cannot change selection policy")
+    }
+    else {
+        Plan currentPlan = simulation.getPlan(planId);
+        currentPlan.setSelectionPolicy(getSelectionPolicy(newPolicy), currentPlan.getlifeQualityScore(), currentPlan.getEconomyScore(), currentPlan.getEnvironmentScore())
+    }
+}
+
+
 
 

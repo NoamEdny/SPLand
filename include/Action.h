@@ -22,11 +22,13 @@ class BaseAction{
         void complete();
         void error(string errorMsg);
         const string &getErrorMsg() const;
+        string statusToString(ActionStatus status) const;
 
     private:
         string errorMsg;
         ActionStatus status;
 };
+
 
 class SimulateStep : public BaseAction {
 

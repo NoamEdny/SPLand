@@ -148,13 +148,12 @@ void Plan::printStatus(){
 
 const string Plan::toString() const {
     string output;
-    output = "ID: " + std::to_string(plan_id) + "\n" + 
-             "Plan Status: " + statusToString() + "\n" +
-             "Settlement Name: " + settlement.getName() + "\n" +
-             "Capacity: " + std::to_string(capacity) + "\n"  +
-             "Life quality score: " +  std::to_string(life_quality_score) + " , Economy score: " +  std::to_string(economy_score) +
-             " , Environment score: " +  std::to_string(environment_score) + "\n" +
-            facilitiesToString() + "\n";
+    output = "planID: " + std::to_string(plan_id) + "settlementName: " + settlement.getName() + "\n" +
+             "planStatus: " + statusToString() + "\n" +
+             "LifeQualityScore: " +  std::to_string(life_quality_score) +  "\n" +
+             "EconomyScore: " +  std::to_string(economy_score) + "\n" +
+             "EnvironmentScore: " +  std::to_string(environment_score) + "\n" +
+             facilitiesToString(); 
     return output;
 }
 
@@ -184,6 +183,8 @@ string Plan::facilitiesToString() const {
     }
     return toString;
 }
+
+
 
 
 
