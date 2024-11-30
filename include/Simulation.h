@@ -13,19 +13,25 @@ class SelectionPolicy;
 
 class Simulation {
     public:
+        //Consractor:
         Simulation(const string &configFilePath);
+        Simulation(); //TOdO
+    //Rule Of 3:
+        // Copy-Constructor:
+        Simulation(const Simulation &other);
+
+        
         void start();  
         void addPlan(const Settlement &settlement, SelectionPolicy *selectionPolicy);
-        void addAction(BaseAction *action);
+        void addAction(BaseAction *action); //TO DO
         bool addSettlement(Settlement *settlement);
         bool addFacility(FacilityType facility);
         bool isSettlementExists(const string &settlementName);
         Settlement &getSettlement(const string &settlementName);
         SelectionPolicy *getSelectionPolicy (const string &selectionPolicy);
+        SelectionPolicy *getSelectionPolicy (const string &selectionPolicy, int LifeQualityScore, int EconomyScore, int EnvironmentScore);
+        int getPlanCounter() const;
         Plan &getPlan(const int planID);
-        int getPlanCounter();
-        vector<Plan> &getPlans();
-        int getPlanCounter();
         void step();
         void close();
         void open();
@@ -36,6 +42,6 @@ class Simulation {
         vector<BaseAction*> actionsLog;
         vector<Plan> plans;
         vector<Settlement*> settlements;
-        vector<FacilityType> facilitiesOptions; 
+        vector<FacilityType> facilitiesOptions; 
 
 };

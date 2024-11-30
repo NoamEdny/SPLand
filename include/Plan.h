@@ -37,6 +37,7 @@ class Plan {
         const string toString() const;
         string statusToString() const;
         string facilitiesToString() const;
+        string getSelectionPolicy () const; //to do
 
     private:
         int plan_id;

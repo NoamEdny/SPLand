@@ -96,7 +96,7 @@ const FacilityStatus& Facility::getStatus() const{
 
 
 const string Facility::toString() const{
-    return "Name: " + getName() + " , Status: " + statusToString() + " , Time left: " + std::to_string(timeLeft);
+    return "facilityName: " + getName() + " , facilityStatus: " + statusToString();
 }
 
 string Facility::statusToString() const{
