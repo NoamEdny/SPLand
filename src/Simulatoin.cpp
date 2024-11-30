@@ -22,17 +22,20 @@ Simulation::Simulation(const string &configFilePath)
         // Process based on the type of the line
         if (tokens[0] == "settlement") {
             addSettlement(new Settlement(tokens[1], static_cast<SettlementType>(stoi(tokens[2]))));
-        } else if (tokens[0] == "facility") {
+        } 
+        else if (tokens[0] == "facility") {
             addFacility(FacilityType(tokens[1], static_cast<FacilityCategory>(stoi(tokens[2])),
                 stoi(tokens[3]), stoi(tokens[4]), stoi(tokens[5]), stoi(tokens[6])));
-        } else if (tokens[0] == "plan") {
+        } 
+        else if (tokens[0] == "plan") {
             addPlan(getSettlement(tokens[1]), getSelectionPolicy(tokens[2])); //"getSelectionPolicy" cerate a new SelectionPolic - it's going to be deletad by the destrector of the plan
         }
     }
     configFile.close();
 }
 
-//Rule Of 3:
+
+//Rule Of 5:
 // Copy-Constructor:
 Simulation::Simulation(const Simulation &other){
     //actionsLog:
@@ -55,8 +58,123 @@ Simulation::Simulation(const Simulation &other){
     planCounter = other.planCounter;
 }
 
+// Copy Assignment Operator:
+Simulation &Simulation::operator=(const Simulation &other){
+    if (this != &other){
+        close(); // Delete all the elements in the actionsLog, Plan, settlements vectors:
 
+        // Deep copy the actionsLog, Plan, settlements vectors:
+        //actionsLog:
+        for(BaseAction *action : other.actionsLog){
+            actionsLog.push_back(action->clone());
+        }
+        //Plan (it's may seems like we don't need deep copy, but Plan has a pointer field)
+        for(Plan plan : other.plans){
+            plans.push_back(Plan(plan));
+        }
 
+        //settlements:
+        for(Settlement *settlement : other.settlements){
+            settlements.push_back(new Settlement(*settlement));
+        }
+
+        copy(other.facilitiesOptions.begin(), other.facilitiesOptions.end(), facilitiesOptions.begin()); // The shallow default copy is good
+
+        isRunning = other.isRunning;
+        planCounter = other.planCounter;
+        }
+    return *this; 
+}
+
+// Destructor:
+Simulation::~Simulation(){
+    // Delete all the elements in the actionsLog, Plan, settlements vectors:
+    for(BaseAction *action : actionsLog){
+        delete action;
+    }
+
+    //plans
+    for(Plan plan : plans){
+        delete &plan;
+    }
+
+    //settlements:
+    for(Settlement *settlement : settlements){
+        delete settlement;
+    }
+}
+
+//Move-Constructor:
+Simulation::Simulation(Simulation &&other)
+: isRunning(other.isRunning),planCounter(other.planCounter),actionsLog(other.actionsLog),plans(other.plans), settlements(other.settlements), facilitiesOptions(other.facilitiesOptions)
+{
+    //making all the pointers of other to "nullptr" because it's not under other anymore:
+    for(BaseAction *action : actionsLog){
+        action = nullptr;
+    }
+
+    //plans
+    for(Plan plan : plans){
+        plan.setSelectionPolicy(nullptr);
+    }
+
+    //settlements:
+    for(Settlement *settlement : settlements){
+        settlement = nullptr;
+    }
+}
+
+//Move Assignment Operator:
+Simulation &Simulation::operator=(Simulation &&other){
+    if (this != &other){
+        clear();
+        isRunning = other.isRunning;
+        planCounter = other.planCounter;
+        // Shallow copy the vector because other is rvalue
+        actionsLog = actionsLog;
+        plans =other.plans;
+        settlements = other.settlements;
+        facilitiesOptions = other.facilitiesOptions;
+
+        //making all the pointers of other to "nullptr" because it's not under other anymore:
+        for(BaseAction *action : actionsLog){
+            action = nullptr;
+        }
+
+        //plans
+        for(Plan plan : plans){
+            plan.setSelectionPolicy(nullptr);
+        }
+
+        //settlements:
+        for(Settlement *settlement : settlements){
+            settlement = nullptr;
+        }
+    }
+    
+
+}
+
+void Simulation::clear(){
+    for(BaseAction *action : actionsLog){
+            delete action;
+        }
+        actionsLog.clear();
+
+        //plans
+        for(Plan plan : plans){
+            delete &plan;
+        }
+        plans.clear();
+
+        //settlements:
+        for(Settlement *settlement : settlements){
+            delete settlement;
+        }
+        settlements.clear();
+}
+
+//Mehtods:
 
 void Simulation::start(){
     open(); // Indicates that the simulation is running
