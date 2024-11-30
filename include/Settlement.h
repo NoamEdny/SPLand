@@ -16,6 +16,7 @@ class Settlement {
     public:
     //Constructor
         Settlement(const string &name, SettlementType type);
+        Settlement() = default;
 
     //Rule Of 3:
         // Copy-Constructor

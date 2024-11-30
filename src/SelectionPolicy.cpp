@@ -34,6 +34,10 @@ NaiveSelection* NaiveSelection::clone() const {
     return new NaiveSelection(*this);
 }
 
+string NaiveSelection::getSelectType() const{
+    return "nve";
+} 
+
 
 //***********************************************************************************************************
 
@@ -88,6 +92,10 @@ BalancedSelection* BalancedSelection::clone() const {
     return new BalancedSelection(*this);
 }
 
+string BalancedSelection::getSelectType() const{
+    return "bal";
+} 
+
 
 
 //***********************************************************************************************************
@@ -124,6 +132,11 @@ EconomySelection* EconomySelection :: clone() const {
     return new EconomySelection(*this);
 }
 
+string EconomySelection::getSelectType() const{
+    return "eco";
+} 
+
+
 //***********************************************************************************************************
 //************************************************  SustainabilitySelectio ************************************************
 
@@ -158,6 +171,11 @@ const string SustainabilitySelection::toString() const {
 SustainabilitySelection* SustainabilitySelection :: clone() const {
     return new SustainabilitySelection(*this);
 }
+
+string EconomySelection::getSelectType() const{
+    return "env";
+} 
+
 
 
 
