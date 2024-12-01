@@ -15,10 +15,12 @@ class Plan {
     //Constructor
         Plan(const int planId, const Settlement &settlement, SelectionPolicy *selectionPolicy, const vector<FacilityType> &facilityOptions);
 
-    //Rule Of 5:
+    //Rule Of 3:
         // Copy-Constructor
         Plan(const Plan &other);
-        //vector<Facility*>* cloneFacilitys(const vector<Facility*> &other);
+
+        //Copy Assignment Operator: in this case we don't need becuse settlement is const
+        Plan& operator=(const Plan &other);
         
         // Destructor
         ~Plan();
@@ -27,7 +29,7 @@ class Plan {
         Plan(Plan &&other);
 
         //Move Assignment Operator: in this case we don't need becuse settlement is const
-        Plan& operator=(const Plan &other) = default;
+        Plan& operator=(Plan &&other);
 
 
     //Methodes:

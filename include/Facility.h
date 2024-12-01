@@ -20,7 +20,13 @@ class FacilityType {
     public:
         FacilityType(const string &name, const FacilityCategory category, const int price, const int lifeQuality_score, const int economy_score, const int environment_score);
         FacilityType();
-        FacilityType &operator=(const FacilityType &other) = default;
+        //Rull of 3:
+        FacilityType(const FacilityType &other);
+        FacilityType &operator=(const FacilityType &other); // no need but implements becuase compiler didnt like
+        ~FacilityType();
+
+
+        //Methods:
         bool &operator==(const FacilityType &other) const;
         const string &getName() const;
         int getCost() const;
@@ -48,7 +54,13 @@ class Facility: public FacilityType {
         Facility();
 
 
-        Facility(const Facility &other) = default;
+
+        //Rull of 3:
+        Facility(const Facility &other);
+        Facility &operator=(const Facility &other); // no need but implements becuase compiler didnt like
+        ~Facility();
+
+        //Methods:
         const string &getSettlementName() const;
         const int getTimeLeft() const;
         

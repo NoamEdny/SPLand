@@ -17,7 +17,17 @@ FacilityType::FacilityType(const string &name, const FacilityCategory category, 
 FacilityType::FacilityType()
 : FacilityType("", FacilityCategory::LIFE_QUALITY, 0, 0, 0, 0){}
 
-//Rule Of 3: Defult
+//Rule Of 3:
+FacilityType::FacilityType(const FacilityType &other)
+:FacilityType(other.name, other.category, other.price, other.lifeQuality_score,other.economy_score,other.environment_score){}
+
+FacilityType &FacilityType::operator=(const FacilityType &other){
+    return *this;
+}
+
+FacilityType::~FacilityType(){
+
+}
 
 //Method
 bool &FacilityType::operator==(const FacilityType &other) const{
@@ -70,7 +80,15 @@ Facility::Facility(const FacilityType &type, const string &settlementName)
 Facility::Facility()
 : Facility(FacilityType(), ""){}
 
-//Rule Of 3: Defult
+//Rule Of 3:
+Facility::Facility(const Facility &other)
+:Facility(other.name, other.settlementName,other.category, other.price, other.lifeQuality_score,other.economy_score,other.environment_score){}
+
+Facility &Facility::operator=(const Facility &other){
+    return *this;
+}
+
+Facility::~Facility(){}
 
 //Method:
 

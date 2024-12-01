@@ -37,6 +37,9 @@ Plan::Plan(const Plan &other)
 }
 
 // Copy Assignment Operator: in this case we don't need becuse settlement is const
+Plan& Plan::operator=(const Plan &other){
+    return *this;
+}
 
 
 //Destructor
@@ -78,6 +81,9 @@ Plan::Plan(Plan &&other)
 }
 
 //Move Assignment Operator: in this case we don't need becuse settlement is const
+Plan& Plan::operator=(Plan &&other){
+    return *this;
+}
 
 //Methods:
 //geters:
@@ -124,9 +130,7 @@ void Plan::step() {
     {
         for (auto it = underConstruction.begin(); it != underConstruction.end(); ) {
         Facility* facilityToBuild = *it;
-        //cout << facilityToBuild->toString() << endl;
         FacilityStatus newStatus = facilityToBuild->step();
-        //cout << facilityToBuild->toString() << endl;
         if (newStatus == FacilityStatus::OPERATIONAL) {
             addFacility(facilityToBuild);
             

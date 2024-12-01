@@ -1,23 +1,48 @@
-# Please implement your Makefile rules and targets below.
-# Customize this file to define how to build your project.
-all: clean bin compile link run
+# Compiler and flags
+CXX = g++
+CXXFLAGS = -g -Wall -Weffc++ -std=c++11 -Iinclude
 
-clean: 
-	rm -f bin/*.o bin/test
+# Directories
+SRC_DIR = src
+INCLUDE_DIR = include
+BIN_DIR = bin
 
+# Target executable
+TARGET = $(BIN_DIR)/main
+
+# Source files
+SRCS = $(SRC_DIR)/main.cpp \
+       $(SRC_DIR)/Simulation.cpp \
+       $(SRC_DIR)/Action.cpp \
+       $(SRC_DIR)/Auxiliary.cpp \
+       $(SRC_DIR)/SelectionPolicy.cpp \
+       $(SRC_DIR)/Facility.cpp \
+       $(SRC_DIR)/Settlement.cpp \
+       $(SRC_DIR)/Plan.cpp  # הוספתי את Plan.cpp
+
+# Object files
+OBJS = $(SRCS:$(SRC_DIR)/%.cpp=$(BIN_DIR)/%.o)
+
+# All target
+all: clean bin $(TARGET)
+
+# Clean target
+clean:
+	rm -rf $(BIN_DIR)/*.o $(TARGET)
+
+# Create bin directory
 bin:
-	mkdir -p bin
+	mkdir -p $(BIN_DIR)
 
-compile:
-	g++ -g -Wall -Weffc++ -std=c++11 -c -Iinclude -o bin/main.o src/main.cpp
-	g++ -g -Wall -Weffc++ -std=c++11 -c -Iinclude -o bin/Actions.o src/Action.cpp
-	g++ -g -Wall -Weffc++ -std=c++11 -c -Iinclude -o bin/Simulation.o src/Simulation.cpp
-	g++ -g -Wall -Weffc++ -std=c++11 -c -Iinclude -o bin/SelectionPolicy.o src/SelectionPolicy.cpp
-	g++ -g -Wall -Weffc++ -std=c++11 -c -Iinclude -o bin/Facility.o src/Facility.cpp
-	g++ -g -Wall -Weffc++ -std=c++11 -c -Iinclude -o bin/Settlement.o src/Settlement.cpp
+# Compile all .cpp files
+$(BIN_DIR)/%.o: $(SRC_DIR)/%.cpp
+	$(CXX) $(CXXFLAGS) -c -o $@ $<
 
-link:
-	g++ -o bin/main bin/main.o bin/Action.o bin/Simulation.o bin/SelectionPolicy.o bin/Facility.o bin/Settlement.o
+# Link object files to create the final executable
+$(TARGET): $(OBJS)
+	$(CXX) $(CXXFLAGS) -o $@ $^
 
-run:
-	./bin/main
+# Run the executable
+run: $(TARGET)
+	./$(TARGET)
+

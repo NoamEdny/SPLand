@@ -3,7 +3,6 @@
 #include "Settlement.h"
 
 using namespace std;
-
 //Simulation* backup = nullptr;
 
 int main(int argc, char** argv){

@@ -5,6 +5,7 @@
 #include <iostream>
 using namespace std;
 
+ /********************************************************************************************************* */
 //Consractor
 Simulation::Simulation(const string &configFilePath)
     : isRunning(false), planCounter(0) // Default initialization
@@ -174,6 +175,7 @@ void Simulation::clear(){
         settlements.clear();
 }
 
+ /********************************************************************************************************* */
 //Mehtods:
 
 void Simulation::start(){
@@ -326,7 +328,7 @@ void Simulation::close(){
 }
 
 void Simulation::open(){
-    isRunning - true;
+    isRunning = true;
     cout << "Simulation started!" << endl;
 }
 
