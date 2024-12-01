@@ -4,7 +4,7 @@
 #include "Simulation.h"
 enum class SettlementType;
 enum class FacilityCategory;
-
+class Simulation; // Forward Declaration
 enum class ActionStatus{
     COMPLETED, ERROR
 };

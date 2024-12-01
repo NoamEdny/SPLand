@@ -2,6 +2,9 @@
 #include <iostream>
 using namespace std;
 using std::string;
+#include "Simulation.h"
+#pragma once
+
 
 ActionStatus BaseAction::getStatus() const {
     return status;

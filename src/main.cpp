@@ -1,68 +1,58 @@
-//#include "Simulation.h"
-
-#include "Facility.h"
-#include "Settlement.h"
+#include "Simulation.h"
 #include <iostream>
-#include "SelectionPolicy.h"
-#include "Plan.h"
-using std::string;
-using std::vector;
-using namespace std;
+#include <fstream>
+#include <string>
 
-//Simulation* backup = nullptr;
-
- /*int main(int argc, char** argv){
- 
-   if(argc!=2){
-        cout << "usage: simulation <config_path>" << endl;
-        return 0;
+int main(int argc, char* argv[]) {
+    if (argc < 2) {
+        std::cerr << "Usage: " << argv[0] << " <config_file_path>" << std::endl;
+        return 1;
     }
-    string configurationFile = argv[1];
-    Simulation simulation(configurationFile);
-    simulation.start();
-    if(backup!=nullptr){
-    	delete backup;
-    	backup = nullptr;
-  */ 
 
+    // קריאת קובץ הקונפיג
+    std::string configFilePath = argv[1];
+    std::ifstream configFile(configFilePath);
+    if (!configFile.is_open()) {
+        std::cerr << "Error: Unable to open configuration file: " << configFilePath << std::endl;
+        return 1;
+    }
 
-int main() {
- try {
-           // Creating a settlement
-        Settlement city("TestCity", SettlementType::CITY);
-        cout << "Settlement created: " << city.toString() << endl;
-        cout << "Capacity: " + std::to_string(city.getCapacity()) << endl;
+    try {
+        // יצירת הסימולציה על פי הקונפיג
+        Simulation simulation(configFilePath);
 
-        // Creating facilities
-        FacilityType school("School", FacilityCategory::LIFE_QUALITY, 1, 2, 1, 0);
-        FacilityType factory("Factory", FacilityCategory::ECONOMY, 5, 0, 3, 1);
-        FacilityType park("Park", FacilityCategory::ENVIRONMENT, 4, 1, 0, 3);
-        cout << "FacilityType: " + std::to_string(factory.getCost()) << endl;
+        // התחלת הסימולציה
+        simulation.start();
 
-        vector<FacilityType> facilities = {school, factory, park};
+        // לולאה המדמה ריצת תוכנית
+        std::cout << "Simulation started successfully. Enter commands below:" << std::endl;
+        std::string command;
+        while (std::getline(std::cin, command)) {
+            if (command == "exit") {
+                break;
+            } else if (command == "step") {
+                simulation.step();
+            } else if (command == "print log") {
+                    vector<BaseAction*> actions = simulation.getActionsLog();
+                    for (BaseAction* action : actions) {
+                        if (action) {
+                            std::cout << action->toString() << std::endl;
+                        }
+                    }
+                }
 
-        // Creating a naive selection policy
-        NaiveSelection naivePolicy;
-        // Creating a plan with the settlement and policy
-        Plan plan(1, city, &naivePolicy, facilities);
-        cout << "\nPlan created:\n" << plan.toString() << endl;
+             else {
+                std::cerr << "Unknown command: " << command << std::endl;
+                std::cout << "Available commands: step, print log, exit" << std::endl;
+            }
+        }
+        
 
-        // Executing the first step
-        cout << "\nExecuting first step...\n";
-        plan.step();
-        cout << "Plan after first step:\n" << plan.toString() << endl;
-
-        // Switching to a balanced selection policy
-        BalancedSelection balancedPolicy(plan.getlifeQualityScore(),plan.getEconomyScore(), plan.getEnvironmentScore());
-        cout << "\nChanging selection policy to Balanced...\n";
-        plan.setSelectionPolicy(&balancedPolicy);
-
-        // Executing another step
-        cout << "\nExecuting second step...\n";
-        plan.step();
-        cout << "Plan after second step:\n" << plan.toString() << endl;
-    } catch (const exception &e) {
-        cerr << "An error occurred: " << e.what() << endl;
+        // סגירת הסימולציה
+        simulation.close();
+    } catch (const std::exception& e) {
+        std::cerr << "Error occurred: " << e.what() << std::endl;
+        return 1;
     }
 
     return 0;

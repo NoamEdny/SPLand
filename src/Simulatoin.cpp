@@ -339,12 +339,8 @@ void Simulation::setSelectionPolicy(const string &selectionPolicy, int planID) {
     } else if (selectionPolicy == "Sustainability") {
         policy = new SustainabilitySelection();
     }
-
-    if (policy) {
-        plan.setSelectionPolicy(policy); 
-    } else {
-        throw runtime_error("Invalid selection policy");
-    }
+     plan.setSelectionPolicy(policy); 
+    
 }
 
 vector<BaseAction*> Simulation::getActionsLog(){

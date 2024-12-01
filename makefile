@@ -1,37 +1,42 @@
-# Compiler and flags
+# שם הקומפיילר
 CXX = g++
-CXXFLAGS = -g -Wall -Weffc++ -std=c++17 -Iinclude
 
-# Directories
-SRCDIR = src
-OBJDIR = obj
-BINDIR = bin
+# דגלים לקומפילציה
+CXXFLAGS = -std=c++17 -Wall -Wextra -g
 
-# Target program
-TARGET = $(BINDIR)/program
+# תיקיות
+SRC_DIR = src
+OBJ_DIR = obj
+BIN_DIR = bin
+INCLUDE_DIR = include
 
-# Source and object files
-SRCS = $(SRCDIR)/main.cpp $(SRCDIR)/Settlement.cpp $(SRCDIR)/Facility.cpp \
-       $(SRCDIR)/SelectionPolicy.cpp $(SRCDIR)/Plan.cpp
-OBJS = $(patsubst $(SRCDIR)/%.cpp, $(OBJDIR)/%.o, $(SRCS))
+# קבצים
+TARGET = $(BIN_DIR)/simulation_test
+SOURCES = $(wildcard $(SRC_DIR)/*.cpp)
+OBJECTS = $(patsubst $(SRC_DIR)/%.cpp, $(OBJ_DIR)/%.o, $(SOURCES))
 
-# Default target
+# כלל ברירת מחדל
 all: $(TARGET)
 
-# Link the program
-$(TARGET): $(OBJS)
-	@mkdir -p $(BINDIR)
-	$(CXX) $(CXXFLAGS) -o $@ $(OBJS)
+# בניית הקובץ הבינארי
+$(TARGET): $(OBJECTS) | $(BIN_DIR)
+	$(CXX) $(CXXFLAGS) -I$(INCLUDE_DIR) $^ -o $@
 
-# Compile object files
-$(OBJDIR)/%.o: $(SRCDIR)/%.cpp
-	@mkdir -p $(OBJDIR)
-	$(CXX) $(CXXFLAGS) -c $< -o $@
+# קומפילציה של קבצי ה-CPP
+$(OBJ_DIR)/%.o: $(SRC_DIR)/%.cpp | $(OBJ_DIR)
+	$(CXX) $(CXXFLAGS) -I$(INCLUDE_DIR) -c $< -o $@
 
-# Clean up build files
+# יצירת תיקיות אם לא קיימות
+$(OBJ_DIR):
+	mkdir -p $(OBJ_DIR)
+
+$(BIN_DIR):
+	mkdir -p $(BIN_DIR)
+
+# ניקוי קבצים
 clean:
-	@echo "Cleaning up..."
-	rm -rf $(OBJDIR) $(BINDIR)
+	rm -rf $(OBJ_DIR) $(BIN_DIR)
 
-# Phony targets
-.PHONY: all clean
+# הרצה של הסימולציה
+run: all
+	$(TARGET) config_file.txt
