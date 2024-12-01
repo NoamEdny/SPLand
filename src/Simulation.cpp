@@ -61,7 +61,7 @@ Simulation::Simulation(const Simulation &other){
 // Copy Assignment Operator:
 Simulation &Simulation::operator=(const Simulation &other){
     if (this != &other){
-        close(); // Delete all the elements in the actionsLog, Plan, settlements vectors:
+        clear(); // Delete all the elements in the actionsLog, Plan, settlements vectors:
 
         // Deep copy the actionsLog, Plan, settlements vectors:
         //actionsLog:
@@ -151,7 +151,7 @@ Simulation &Simulation::operator=(Simulation &&other){
             settlement = nullptr;
         }
     }
-    
+    return *this;
 
 }
 
@@ -224,7 +224,7 @@ void Simulation::start(){
             close ->act(*this);
             addAction(close);
         }  
-        else if (tokens[0] == "backup") {
+        /*else if (tokens[0] == "backup") {
             BaseAction *backupSimulation = new BackupSimulation();
             backupSimulation ->act(*this);
             addAction(backupSimulation);
@@ -233,7 +233,7 @@ void Simulation::start(){
             BaseAction *restoreSimulation = new RestoreSimulation();
             restoreSimulation ->act(*this);
             addAction(restoreSimulation);
-        }  
+        } */ 
     }
 }
 
@@ -247,6 +247,10 @@ void Simulation::addPlan(const Settlement &settlement, SelectionPolicy *selectio
     Plan newPlan = Plan(planCounter,settlement,selectionPolicy, this->facilitiesOptions);
     plans.push_back(newPlan);
     planCounter += 1;
+}
+
+void Simulation::addAction(BaseAction *action){
+    actionsLog.push_back(action);
 }
 
 bool Simulation::addSettlement(Settlement *settlement){

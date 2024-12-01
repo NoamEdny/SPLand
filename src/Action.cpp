@@ -2,8 +2,13 @@
 #include <iostream>
 using namespace std;
 using std::string;
-#include "Simulation.h"
 #pragma once
+
+//***********************************************************************************************************
+
+//************************************************  BaseAction ************************************************
+BaseAction::BaseAction():
+status(ActionStatus::ERROR),errorMsg(){}
 
 
 ActionStatus BaseAction::getStatus() const {
@@ -244,14 +249,19 @@ const string Close::toString() const {
 
 //************************************************ BackupSimulation ************************************************
 //Constractor
-BackupSimulation::BackupSimulation() {}
+/*BackupSimulation::BackupSimulation() {}
 
-void BackupSimulation::act(Simulation &simulation){
+void BackupSimulation::act(Simulation &simulation) {
     
-
-
+    if (backup == nullptr) {
+        backup = new Simulation(simulation);// using the Simulation Copy-Constractor
+    }
+    else{
+        *backup = simulation;//using the Simulation Copy-Opertor
+    }
     complete();
 }
+
 
 BackupSimulation *BackupSimulation::clone() const {
     return new BackupSimulation(*this);
@@ -268,10 +278,13 @@ const string BackupSimulation::toString() const {
 RestoreSimulation::RestoreSimulation() {}
 
 void RestoreSimulation::act(Simulation &simulation){
-    
-
-
-    complete();
+    if (backup == nullptr){
+        error("No backup available");
+    }
+    else{
+        simulation = *backup;
+        complete();
+    }  
 }
 
 RestoreSimulation *RestoreSimulation::clone() const {
@@ -280,7 +293,7 @@ RestoreSimulation *RestoreSimulation::clone() const {
 
 const string RestoreSimulation::toString() const {
     return "restore " + statusToString(getStatus());
-}
+}*/
 
 
 

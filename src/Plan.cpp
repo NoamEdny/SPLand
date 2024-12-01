@@ -5,7 +5,7 @@ using std::string;
 using namespace std;
 
 
-// check the consractor (ettlement(const_cast<Settlement&>(settlement)))
+// Constructor:
 Plan::Plan(const int planId, const Settlement &settlement, SelectionPolicy *selectionPolicy, const vector<FacilityType> &facilityOptions) 
 : 
 plan_id(planId), settlement(const_cast<Settlement&>(settlement)), selectionPolicy(selectionPolicy), facilityOptions(facilityOptions), //from user
@@ -14,10 +14,11 @@ facilities(), underConstruction(),//facility
 life_quality_score(0), economy_score(0), environment_score(0) {} //scores
 
 //Rule Of 3:
+
 // Copy-Constructor
 Plan::Plan(const Plan &other)
 //Initialize the const variables before the default constructor in C++
-:Plan(other.plan_id, other.settlement, selectionPolicy->clone(),other.facilityOptions)
+:Plan(other.plan_id, other.settlement, other.selectionPolicy->clone(),other.facilityOptions)
 {
     status = other.status;
     capacity = other.capacity;
@@ -49,6 +50,33 @@ Plan::~Plan(){
 
 }
 
+//Move-Constructor:
+Plan::Plan(Plan &&other)
+//Initialize the const variables before the default constructor in C++
+:Plan(other.plan_id, other.settlement,other.selectionPolicy,other.facilityOptions)
+{
+    status = other.status;
+    capacity = other.capacity;
+    life_quality_score = other.getlifeQualityScore();
+    economy_score = other.getEconomyScore();
+    environment_score = other.getEnvironmentScore();
+
+    //shallow Copy of the Facility lists and Reset the pointers of other to null:
+    for(Facility* facility : other.underConstruction){
+        addFacility(facility);
+        facility = nullptr;
+    }
+
+    for(Facility* facility : other.facilities){
+        addFacility(facility);
+        facility = nullptr;
+    }
+
+    other.selectionPolicy = nullptr;
+
+}
+
+//Move Assignment Operator: in this case we don't need becuse settlement is const
 
 //Methods:
 //geters:

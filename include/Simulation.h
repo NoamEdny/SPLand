@@ -5,6 +5,7 @@
 #include "Plan.h"
 #include "Settlement.h"
 #include "Action.h"
+#include "Auxiliary.h"
 using std::string;
 using std::vector;
 
@@ -34,7 +35,7 @@ class Simulation {
 
         void start();  
         void addPlan(const Settlement &settlement, SelectionPolicy *selectionPolicy);
-        void addAction(BaseAction *action); //TO DO
+        void addAction(BaseAction *action);
         bool addSettlement(Settlement *settlement);
         bool addFacility(FacilityType facility);
         bool isSettlementExists(const string &settlementName);
