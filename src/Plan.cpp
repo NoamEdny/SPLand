@@ -38,6 +38,7 @@ Plan::Plan(const Plan &other)
 
 // Copy Assignment Operator: in this case we don't need becuse settlement is const
 
+
 //Destructor
 Plan::~Plan(){
     delete selectionPolicy;

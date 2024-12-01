@@ -39,7 +39,7 @@ class Simulation {
         bool addSettlement(Settlement *settlement);
         bool addFacility(FacilityType facility);
         bool isSettlementExists(const string &settlementName);
-        Settlement &getSettlement(const string &settlementName);
+        Settlement *getSettlement(const string &settlementName);
 
         void setSelectionPolicy  (const string &selectionPolicy, int planID);
 

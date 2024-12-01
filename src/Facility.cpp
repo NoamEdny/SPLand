@@ -20,6 +20,13 @@ FacilityType::FacilityType()
 //Rule Of 3: Defult
 
 //Method
+bool &FacilityType::operator==(const FacilityType &other) const{
+    bool isEquale;
+    isEquale = (name == other.name) && (category == other.category) && (price == other.price) &&
+    (lifeQuality_score == other.lifeQuality_score) && (economy_score == other.economy_score);
+    return isEquale;
+}
+
 const string &FacilityType::getName() const{
     return name;
 }
@@ -66,6 +73,7 @@ Facility::Facility()
 //Rule Of 3: Defult
 
 //Method:
+
 const string &Facility::getSettlementName() const{
     return settlementName;
 }

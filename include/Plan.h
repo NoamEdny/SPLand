@@ -27,7 +27,7 @@ class Plan {
         Plan(Plan &&other);
 
         //Move Assignment Operator: in this case we don't need becuse settlement is const
-        Plan& operator=(const Plan&) = delete;
+        Plan& operator=(const Plan &other) = default;
 
 
     //Methodes:

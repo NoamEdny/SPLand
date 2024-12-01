@@ -20,6 +20,8 @@ class FacilityType {
     public:
         FacilityType(const string &name, const FacilityCategory category, const int price, const int lifeQuality_score, const int economy_score, const int environment_score);
         FacilityType();
+        FacilityType &operator=(const FacilityType &other) = default;
+        bool &operator==(const FacilityType &other) const;
         const string &getName() const;
         int getCost() const;
         int getLifeQualityScore() const;
@@ -45,7 +47,7 @@ class Facility: public FacilityType {
         Facility(const FacilityType &type, const string &settlementName);
         Facility();
 
-        //Rule Of 3:
+
         Facility(const Facility &other) = default;
         const string &getSettlementName() const;
         const int getTimeLeft() const;

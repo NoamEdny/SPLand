@@ -28,7 +28,7 @@ Simulation::Simulation(const string &configFilePath)
                 stoi(tokens[3]), stoi(tokens[4]), stoi(tokens[5]), stoi(tokens[6])));
         } 
         else if (tokens[0] == "plan") {
-            addPlan(getSettlement(tokens[1]), getSelectionPolicy(tokens[2])); //"getSelectionPolicy" cerate a new SelectionPolic - it's going to be deletad by the destrector of the plan
+            addPlan(*getSettlement(tokens[1]), getSelectionPolicy(tokens[2])); //"getSelectionPolicy" cerate a new SelectionPolic - it's going to be deletad by the destrector of the plan
         }
     }
     configFile.close();
@@ -281,14 +281,14 @@ bool Simulation::isSettlementExists(const string &settlementName){
     return false;
 }
 
-Settlement &Simulation::getSettlement(const string &settlementName){
+Settlement *Simulation::getSettlement(const string &settlementName){
+    Settlement *sp = nullptr;
     for(Settlement *settlement : settlements){
         if (settlement->getName() == settlementName){
-            return *settlement;
+            return settlement;
         }
     }
-    Settlement defaultSettlement = Settlement();
-    return defaultSettlement;
+    return sp;
 }
 
 SelectionPolicy *Simulation::getSelectionPolicy (const string &selectionPolicy, int LifeQualityScore, int EconomyScore, int EnvironmentScore){

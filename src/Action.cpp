@@ -76,7 +76,7 @@ void AddPlan::act(Simulation &simulation){
         error("Cannot creat this plan");
     }
     else {
-        simulation.addPlan(simulation.getSettlement(settlementName), simulation.getSelectionPolicy(selectionPolicy));
+        simulation.addPlan(*simulation.getSettlement(settlementName), simulation.getSelectionPolicy(selectionPolicy));
          complete();
     }
 }
