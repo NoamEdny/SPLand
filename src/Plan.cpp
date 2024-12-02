@@ -113,6 +113,7 @@ void Plan::setSelectionPolicy(SelectionPolicy *newPolicy) {
 }
 
 
+
 void Plan::step() {
     // select Facility acording to the capacity and the selectionPolicy
     while(status == PlanStatus::AVALIABLE){
@@ -128,24 +129,25 @@ void Plan::step() {
     // Build the facilitys:
     if (status == PlanStatus::BUSY)
     {
-        for (auto it = underConstruction.begin(); it != underConstruction.end(); ) {
-        Facility* facilityToBuild = *it;
-        FacilityStatus newStatus = facilityToBuild->step();
-        if (newStatus == FacilityStatus::OPERATIONAL) {
-            addFacility(facilityToBuild);
-            
-            //Update the scores:
-            life_quality_score += facilityToBuild->getLifeQualityScore();
-            economy_score += facilityToBuild->getEconomyScore();
-            environment_score += facilityToBuild->getEnvironmentScore();
-            capacity = capacity + 1; // Now we can build one more facility 
+        for (int i = 0; i < underConstruction.size(); ) {
+            Facility* facilityToBuild = underConstruction[i];
+            FacilityStatus newStatus = facilityToBuild->step();
+            if (newStatus == FacilityStatus::OPERATIONAL) {
+                addFacility(facilityToBuild);
 
-            it = underConstruction.erase(it); // delete the arry element (no need to delete facilityToBuild becsue it's in facilities)
-            
+                // Update the scores:
+                life_quality_score += facilityToBuild->getLifeQualityScore();
+                economy_score += facilityToBuild->getEconomyScore();
+                environment_score += facilityToBuild->getEnvironmentScore();
+                capacity += 1; // Now we can build one more facility
+
+                // Erase the element by index
+                underConstruction.erase(underConstruction.begin() + i);
+            } else {
+                i++; // Only increment if no element is erased
+            }
         }
-         else {
-            ++it; // iteret to the next element
-        }
+    }
 
         //Update the status:
         if (capacity != 0)
@@ -153,8 +155,7 @@ void Plan::step() {
             status = PlanStatus::AVALIABLE;
         } 
     }
-    } 
-}
+
 
 void Plan::addFacility(Facility* facility){
     if(facility->getStatus() == FacilityStatus::OPERATIONAL){
@@ -181,8 +182,10 @@ void Plan::printStatus(){
 
 const string Plan::toString() const {
     string output;
-    output = "planID: " + std::to_string(plan_id) + "settlementName: " + settlement.getName() + "\n" +
+    output = "planID: " + std::to_string(plan_id) + "\n" +
+             "SettlementName: " + settlement.getName() + "\n" +
              "planStatus: " + statusToString() + "\n" +
+             "SelectionPolicy: " + selectionPolicy->toString() + "\n" +
              "LifeQualityScore: " +  std::to_string(life_quality_score) +  "\n" +
              "EconomyScore: " +  std::to_string(economy_score) + "\n" +
              "EnvironmentScore: " +  std::to_string(environment_score) + "\n" +

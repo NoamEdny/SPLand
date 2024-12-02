@@ -42,7 +42,10 @@ string BaseAction::statusToString(ActionStatus status) const{
 //************************************************  SimulateStep ************************************************
 
 //Constractor
-SimulateStep::SimulateStep(const int numOfSteps) : numOfSteps(numOfSteps) {}
+SimulateStep::SimulateStep(const int numOfSteps) : numOfSteps(numOfSteps) {
+    std::cout << "SimulateStep constructor called with numOfSteps: " << numOfSteps << std::endl;
+}
+
 
 SimulateStep::SimulateStep() : numOfSteps(1) {}
 
@@ -129,9 +132,11 @@ economyScore(economyScore), environmentScore(environmentScore) {}
 
 //Methods:
 void AddFacility::act(Simulation &simulation){
-    if (simulation.addFacility(FacilityType(facilityName, facilityCategory, price, lifeQualityScore, economyScore, environmentScore))){
-            complete();
-    }
+    
+    FacilityType facilityType = FacilityType(facilityName, facilityCategory, price, lifeQualityScore, economyScore, environmentScore);
+    if (simulation.addFacility(facilityType)) {
+        complete();
+    } 
     else {
         error ("Facility already exist");
     }
@@ -184,18 +189,18 @@ void ChangePlanPolicy::act(Simulation &simulation) {
        error("Cannot change selection policy");
     } else {
         Plan currentPlan = simulation.getPlan(planId);
-        currentPlan.setSelectionPolicy(simulation.getSelectionPolicy(newPolicy, currentPlan.getlifeQualityScore(), currentPlan.getEconomyScore(), currentPlan.getEnvironmentScore()));
+        oldPolicy = currentPlan.getSelectionPolicy();
+        
+        simulation.setSelectionPolicy(newPolicy,planId);
+        cout << "PlanID: " + std::to_string(planId) + 
+           ", previousPolicy: " + oldPolicy + 
+           ", newPolicy: " + newPolicy << endl; 
         complete();
-
-        error ("Cannot change selection policy");
     }
         
 }
  const string ChangePlanPolicy::toString() const {
-    return "PlanID: " + std::to_string(planId) + 
-           ", previousPolicy: " + oldPolicy + 
-           ", newPolicy: " + newPolicy + 
-           ", status: " + statusToString(getStatus());
+    return "changePolicy " + std::to_string(planId) + " " + newPolicy+ " " + statusToString(getStatus());
 }
 
 
@@ -249,7 +254,7 @@ const string Close::toString() const {
 
 //************************************************ BackupSimulation ************************************************
 //Constractor
-/*BackupSimulation::BackupSimulation() {}
+BackupSimulation::BackupSimulation() {}
 
 void BackupSimulation::act(Simulation &simulation) {
     
@@ -293,7 +298,7 @@ RestoreSimulation *RestoreSimulation::clone() const {
 
 const string RestoreSimulation::toString() const {
     return "restore " + statusToString(getStatus());
-}*/
+}
 
 
 

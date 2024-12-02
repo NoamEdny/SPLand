@@ -62,7 +62,7 @@ const FacilityType& BalancedSelection::selectFacility(const vector<FacilityType>
         const FacilityType& facility = facilitiesOptions[i];
 
         int newLifeQuality = LifeQualityScore + facility.getLifeQualityScore();
-        int newEconomy = EconomyScore = facility.getEconomyScore();
+        int newEconomy = EconomyScore + facility.getEconomyScore();
         int newEnvironment = EnvironmentScore + facility.getEnvironmentScore();
 
         int maxScore = std::max(newLifeQuality, std::max(newEconomy, newEnvironment));
@@ -74,6 +74,10 @@ const FacilityType& BalancedSelection::selectFacility(const vector<FacilityType>
             selectedIndex = i;
         }
     }
+    //Update scores:
+    LifeQualityScore += facilitiesOptions[selectedIndex].getLifeQualityScore();
+    EconomyScore += facilitiesOptions[selectedIndex].getEconomyScore();
+    EnvironmentScore += facilitiesOptions[selectedIndex].getEnvironmentScore();
 
     return facilitiesOptions[selectedIndex];
 }

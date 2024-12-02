@@ -3,7 +3,7 @@
 #include "Settlement.h"
 
 using namespace std;
-//Simulation* backup = nullptr;
+Simulation* backup = nullptr;
 
 int main(int argc, char** argv){
     if(argc!=2){
@@ -14,10 +14,10 @@ int main(int argc, char** argv){
     Simulation simulation(configurationFile);
     simulation.start();
     
-    /*if(backup!=nullptr){
+    if(backup!=nullptr){
     	delete backup;
     	backup = nullptr;
-    }*/
+    }
 
 
     return 0;

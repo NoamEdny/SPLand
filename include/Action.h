@@ -2,10 +2,11 @@
 #include <string>
 #include <vector>
 #include "Simulation.h"
-//extern Simulation* backup;
+class Simulation; // Forward Declaration
+extern Simulation* backup;
 enum class SettlementType;
 enum class FacilityCategory;
-class Simulation; // Forward Declaration
+
 
 
 enum class ActionStatus{
@@ -109,7 +110,7 @@ class ChangePlanPolicy : public BaseAction {
     private:
         const int planId;
         const string newPolicy;
-        const string oldPolicy;
+        string oldPolicy;
 };
 
 
@@ -131,7 +132,7 @@ class Close : public BaseAction {
     private:
 };
 
-/*class BackupSimulation : public BaseAction {
+class BackupSimulation : public BaseAction {
     public:
         BackupSimulation();
         void act(Simulation &simulation) override;
@@ -148,4 +149,4 @@ class RestoreSimulation : public BaseAction {
         RestoreSimulation *clone() const override;
         const string toString() const override;
     private:
-};*/
+};

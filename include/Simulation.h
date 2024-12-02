@@ -40,9 +40,7 @@ class Simulation {
         bool addFacility(FacilityType facility);
         bool isSettlementExists(const string &settlementName);
         Settlement *getSettlement(const string &settlementName);
-
         void setSelectionPolicy  (const string &selectionPolicy, int planID);
-
         SelectionPolicy *getSelectionPolicy (const string &selectionPolicy); // Get new SelectionPolicy according to "nve"/"bal"/"eco"/"env"
         SelectionPolicy *getSelectionPolicy (const string &selectionPolicy, int LifeQualityScore, int EconomyScore, int EnvironmentScore);// Get new SelectionPolicy according to "nav"/"bal"/"eco"/"env"
         int getPlanCounter() const;

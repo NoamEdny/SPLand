@@ -27,7 +27,7 @@ class FacilityType {
 
 
         //Methods:
-        bool &operator==(const FacilityType &other) const;
+        bool operator==(const FacilityType &other) const;
         const string &getName() const;
         int getCost() const;
         int getLifeQualityScore() const;

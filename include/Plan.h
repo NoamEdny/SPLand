@@ -40,6 +40,7 @@ class Plan {
         const vector<Facility*> &getFacilities() const;
 
         void setSelectionPolicy(SelectionPolicy *selectionPolicy);
+
         void step();
         void printStatus();
         void addFacility(Facility* facility);

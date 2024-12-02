@@ -11,6 +11,7 @@ Simulation::Simulation(const string &configFilePath)
     : isRunning(false), planCounter(0) // Default initialization
 {
     ifstream configFile(configFilePath);
+    
     string line;
     while (getline(configFile, line)) {
         // Skip empty lines or comments
@@ -19,7 +20,6 @@ Simulation::Simulation(const string &configFilePath)
         }
         // Parse the line
         vector<string> tokens = Auxiliary::parseArguments(line);
-
         // Process based on the type of the line
         if (tokens[0] == "settlement") {
             addSettlement(new Settlement(tokens[1], static_cast<SettlementType>(stoi(tokens[2]))));
@@ -94,10 +94,7 @@ Simulation::~Simulation(){
         delete action;
     }
 
-    //plans
-    for(Plan plan : plans){
-        delete &plan;
-    }
+    //plans: needs to check
 
     //settlements:
     for(Settlement *settlement : settlements){
@@ -162,10 +159,6 @@ void Simulation::clear(){
         }
         actionsLog.clear();
 
-        //plans
-        for(Plan plan : plans){
-            delete &plan;
-        }
         plans.clear();
 
         //settlements:
@@ -183,7 +176,7 @@ void Simulation::start(){
 
     while (isRunning) {
         string line;
-        cin >> line;
+        getline(cin, line);
         vector<string> tokens = Auxiliary::parseArguments(line);
         if (tokens[0] == "settlement") {
             BaseAction *newSettlement = new AddSettlement(tokens[1], static_cast<SettlementType>(stoi(tokens[2])));
@@ -191,8 +184,8 @@ void Simulation::start(){
             addAction(newSettlement);
         } 
         else if (tokens[0] == "facility") {
-            BaseAction *newFacility = new AddFacility(tokens[1], static_cast<FacilityCategory>(stoi(tokens[2])), stoi(tokens[3]),
-            stoi(tokens[3]),stoi(tokens[4]),stoi(tokens[5]));
+
+            BaseAction *newFacility = new AddFacility(tokens[1], static_cast<FacilityCategory>(stoi(tokens[2])),stoi(tokens[3]),stoi(tokens[4]),stoi(tokens[5]), stoi(tokens[6]));
             newFacility->act(*this);
             addAction(newFacility);
         } 
@@ -202,7 +195,8 @@ void Simulation::start(){
             addAction(newPlan);
         } 
         else if (tokens[0] == "step") {
-            BaseAction *newStep = new SimulateStep(stoi(tokens[1]));
+            const int numOfStep = stoi(tokens[1]);
+            BaseAction *newStep = new SimulateStep(numOfStep);
             newStep ->act(*this);
             addAction(newStep);
         }
@@ -213,6 +207,7 @@ void Simulation::start(){
         } 
         else if (tokens[0] == "changePolicy") {
             BaseAction *changePolicy = new ChangePlanPolicy(stoi(tokens[1]), tokens[2]);
+
             changePolicy ->act(*this);
             addAction(changePolicy);
         } 
@@ -226,7 +221,7 @@ void Simulation::start(){
             close ->act(*this);
             addAction(close);
         }  
-        /*else if (tokens[0] == "backup") {
+        else if (tokens[0] == "backup") {
             BaseAction *backupSimulation = new BackupSimulation();
             backupSimulation ->act(*this);
             addAction(backupSimulation);
@@ -235,12 +230,15 @@ void Simulation::start(){
             BaseAction *restoreSimulation = new RestoreSimulation();
             restoreSimulation ->act(*this);
             addAction(restoreSimulation);
-        } */ 
+        } 
+       else {
+        cout << "no comment like this" << endl;
+       }
     }
 }
 
 void Simulation::step(){
-    for(Plan planStep : plans){
+    for(Plan &planStep : plans){
         planStep.step();
     }
 }
@@ -294,7 +292,7 @@ Settlement *Simulation::getSettlement(const string &settlementName){
 }
 
 SelectionPolicy *Simulation::getSelectionPolicy (const string &selectionPolicy, int LifeQualityScore, int EconomyScore, int EnvironmentScore){
-    if(selectionPolicy == "nev"){
+    if(selectionPolicy == "nve"){
         return new NaiveSelection();
     }
     else if(selectionPolicy == "eco"){
@@ -336,13 +334,13 @@ void Simulation::setSelectionPolicy(const string &selectionPolicy, int planID) {
     Plan &plan = getPlan(planID); // שימוש בהפניה כדי לעדכן ישירות את התוכנית
     SelectionPolicy *policy = nullptr;
 
-    if (selectionPolicy == "Naive") {
+    if (selectionPolicy == "nve") {
         policy = new NaiveSelection();
-    } else if (selectionPolicy == "Balanced") {
+    } else if (selectionPolicy == "bal") {
         policy = new BalancedSelection(plan.getlifeQualityScore(), plan.getEconomyScore(), plan.getEnvironmentScore());
-    } else if (selectionPolicy == "Economy") {
+    } else if (selectionPolicy == "eco") {
         policy = new EconomySelection();
-    } else if (selectionPolicy == "Sustainability") {
+    } else if (selectionPolicy == "env") {
         policy = new SustainabilitySelection();
     }
      plan.setSelectionPolicy(policy); 

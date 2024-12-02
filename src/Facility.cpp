@@ -30,12 +30,13 @@ FacilityType::~FacilityType(){
 }
 
 //Method
-bool &FacilityType::operator==(const FacilityType &other) const{
-    bool isEquale;
-    isEquale = (name == other.name) && (category == other.category) && (price == other.price) &&
-    (lifeQuality_score == other.lifeQuality_score) && (economy_score == other.economy_score);
-    return isEquale;
+bool FacilityType::operator==(const FacilityType &other) const {
+    return (name == other.name) && (category == other.category) && 
+           (price == other.price) &&
+           (lifeQuality_score == other.lifeQuality_score) &&
+           (economy_score == other.economy_score);
 }
+
 
 const string &FacilityType::getName() const{
     return name;
