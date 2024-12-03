@@ -43,24 +43,19 @@ Simulation::Simulation(const Simulation &other){
     for(BaseAction *action : other.actionsLog){
         actionsLog.push_back(action->clone());
     }
-    
+    //settlements:
+    for(Settlement *settlement : other.settlements){
+        settlements.push_back(new Settlement(*settlement)); 
+    }
 
     //Plan (it's may seems like we don't need deep copy, but Plan has a pointer field)
     // make sure to update the refrence of settlement in the plan
-    plans.clear();
     for(Plan plan : other.plans){
-        //create new settelment to the plan so it wont be deleted
-        Settlement *newSettelemnet = new Settlement(plan.getSettlement()); 
+        // make sure to update the refrence of settlement in the plan
+        string settlName = plan.getSettlement().getName();
+        Settlement *newSettelemnet = getSettlement(settlName); 
         Plan newPlan = Plan(*newSettelemnet,plan);
         plans.push_back(newPlan);
-    }
-
-    //settlements:
-    for(Settlement *settlement : other.settlements){
-        if (!isSettlementExists(settlement->getName())){
-            settlements.push_back(new Settlement(*settlement));
-        }
-        
     }
 
     facilitiesOptions = other.facilitiesOptions; //we dont need to do deep copy
@@ -71,7 +66,6 @@ Simulation::Simulation(const Simulation &other){
 }
 
 // Copy Assignment Operator:
-
 Simulation &Simulation::operator=(const Simulation &other){
     if (this != &other){
         //actionsLog:
@@ -86,16 +80,6 @@ Simulation &Simulation::operator=(const Simulation &other){
             actionsLog.push_back(action->clone());
         }
 
-        //Plan (it's may seems like we don't need deep copy, but Plan has a pointer field)
-        plans.clear();
-        for(Plan plan : other.plans){
-            //create new settelment to the plan so it wont be deleted
-            Settlement *newSettelemnet = new Settlement(plan.getSettlement()); 
-            Plan newPlan = Plan(*newSettelemnet,plan);
-            plans.push_back(newPlan);
-
-        }
-
         //settlements:
         //delete:
         for(Settlement *settlement : settlements){
@@ -105,10 +89,18 @@ Simulation &Simulation::operator=(const Simulation &other){
 
         //deep copy
         for(Settlement *settlement : other.settlements){
-        if (!isSettlementExists(settlement->getName())){
             settlements.push_back(new Settlement(*settlement));
         }
-    }
+
+        //Plan: (it's may seems like we don't need deep copy, but Plan has a pointer field)
+        plans.clear();
+        for(Plan plan : other.plans){
+        // make sure to update the refrence of settlement in the plan
+        string settlName = plan.getSettlement().getName();
+        Settlement *newSettelemnet = getSettlement(settlName); 
+        Plan newPlan = Plan(*newSettelemnet,plan);
+        plans.push_back(newPlan);
+        }
 
         facilitiesOptions = other.facilitiesOptions;
         isRunning = other.isRunning;
