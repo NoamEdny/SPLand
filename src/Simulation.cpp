@@ -8,7 +8,7 @@ using namespace std;
  /********************************************************************************************************* */
 //Consractor
 Simulation::Simulation(const string &configFilePath)
-    : isRunning(false), planCounter(0) // Default initialization
+    : isRunning(false), planCounter(0), settlemenrCounter(0) // Default initialization
 {
     ifstream configFile(configFilePath);
     
@@ -43,47 +43,77 @@ Simulation::Simulation(const Simulation &other){
     for(BaseAction *action : other.actionsLog){
         actionsLog.push_back(action->clone());
     }
+    
+
     //Plan (it's may seems like we don't need deep copy, but Plan has a pointer field)
+    // make sure to update the refrence of settlement in the plan
+    plans.clear();
     for(Plan plan : other.plans){
-        Plan newPlan = Plan(plan);
+        //create new settelment to the plan so it wont be deleted
+        Settlement *newSettelemnet = new Settlement(plan.getSettlement()); 
+        Plan newPlan = Plan(*newSettelemnet,plan);
         plans.push_back(newPlan);
     }
 
     //settlements:
     for(Settlement *settlement : other.settlements){
-        settlements.push_back(new Settlement(*settlement));
+        if (!isSettlementExists(settlement->getName())){
+            settlements.push_back(new Settlement(*settlement));
+        }
+        
     }
 
     facilitiesOptions = other.facilitiesOptions; //we dont need to do deep copy
     
     isRunning = other.isRunning;
     planCounter = other.planCounter;
+
 }
 
 // Copy Assignment Operator:
+
 Simulation &Simulation::operator=(const Simulation &other){
     if (this != &other){
-        clear(); // Delete all the elements in the actionsLog, Plan, settlements vectors:
-
-        // Deep copy the actionsLog, Plan, settlements vectors:
         //actionsLog:
+        //delete
+        for(BaseAction *action : actionsLog){
+            delete action;
+        }
+        actionsLog.clear();
+
+        //deep copy
         for(BaseAction *action : other.actionsLog){
             actionsLog.push_back(action->clone());
         }
+
         //Plan (it's may seems like we don't need deep copy, but Plan has a pointer field)
+        plans.clear();
         for(Plan plan : other.plans){
-            Plan newPlan = Plan(plan);
+            //create new settelment to the plan so it wont be deleted
+            Settlement *newSettelemnet = new Settlement(plan.getSettlement()); 
+            Plan newPlan = Plan(*newSettelemnet,plan);
             plans.push_back(newPlan);
+
         }
 
         //settlements:
+        //delete:
+        for(Settlement *settlement : settlements){
+            delete settlement;
+        }
+        settlements.clear();
+
+        //deep copy
         for(Settlement *settlement : other.settlements){
+        if (!isSettlementExists(settlement->getName())){
             settlements.push_back(new Settlement(*settlement));
         }
+    }
 
         facilitiesOptions = other.facilitiesOptions;
         isRunning = other.isRunning;
         planCounter = other.planCounter;
+        settlemenrCounter = other.settlemenrCounter;
         }
     return *this; 
 }
@@ -123,6 +153,9 @@ Simulation::Simulation(Simulation &&other)
     }
     other.plans = {};
     other.facilitiesOptions = {};
+    planCounter = other.planCounter;
+    settlemenrCounter = other.settlemenrCounter;
+    isRunning = other.isRunning;
 }
 
 //Move Assignment Operator:
@@ -263,8 +296,12 @@ void Simulation::addAction(BaseAction *action){
 }
 
 bool Simulation::addSettlement(Settlement *settlement){
-        settlements.push_back(settlement);
-        return true;
+        if (!isSettlementExists(settlement->getName())){
+            settlements.push_back(settlement);
+            settlemenrCounter += 1;
+            return true;
+        }
+        return false;
 }
 
 bool Simulation::addFacility(FacilityType facility){

@@ -8,10 +8,33 @@ using namespace std;
 // Constructor:
 Plan::Plan(const int planId, const Settlement &settlement, SelectionPolicy *selectionPolicy, const vector<FacilityType> &facilityOptions) 
 : 
-plan_id(planId), settlement(const_cast<Settlement&>(settlement)), selectionPolicy(selectionPolicy), facilityOptions(facilityOptions), //from user
+plan_id(planId), settlement(settlement), selectionPolicy(selectionPolicy), facilityOptions(facilityOptions), //from user
 status(PlanStatus::AVALIABLE), capacity(settlement.getCapacity()), //status
 facilities(), underConstruction(),//facility
 life_quality_score(0), economy_score(0), environment_score(0) {} //scores
+
+//Semi Copy-constrector
+Plan::Plan(const Settlement &settlement,const Plan &other)
+//Initialize the const variables before the default constructor in C++
+:Plan(other.plan_id, settlement, other.selectionPolicy->clone(),other.facilityOptions)
+{
+    status = other.status;
+    capacity = other.capacity;
+    life_quality_score = other.getlifeQualityScore();
+    economy_score = other.getEconomyScore();
+    environment_score = other.getEnvironmentScore();
+
+
+    //Deep Copy of the Facility lists:
+    for(Facility* facility : other.underConstruction){
+       underConstruction.push_back(new Facility(*facility));
+    }
+
+    for(Facility* facility : other.facilities){
+       facilities.push_back(new Facility(*facility));
+    }
+}
+
 
 //Rule Of 3:
 
@@ -25,6 +48,7 @@ Plan::Plan(const Plan &other)
     life_quality_score = other.getlifeQualityScore();
     economy_score = other.getEconomyScore();
     environment_score = other.getEnvironmentScore();
+
 
     //Deep Copy of the Facility lists:
     for(Facility* facility : other.underConstruction){
@@ -71,17 +95,6 @@ Plan::Plan(Plan &&other)
 
     underConstruction = other.underConstruction;
     underConstruction = {};
-    /*
-    for(Facility* facility : other.underConstruction){
-        addFacility(facility);
-        facility = nullptr;
-    }
-
-    for(Facility* facility : other.facilities){
-        addFacility(facility);
-        facility = nullptr;
-    }
-    */
 
     other.selectionPolicy = nullptr;
 
@@ -118,8 +131,6 @@ void Plan::setSelectionPolicy(SelectionPolicy *newPolicy) {
         selectionPolicy = newPolicy; 
 
 }
-
-
 
 void Plan::step() {
     // select Facility acording to the capacity and the selectionPolicy
@@ -211,6 +222,14 @@ string Plan::statusToString() const{
             break;
     }
     return statusString;
+}
+
+Settlement Plan::getSettlement() const {
+    return settlement;
+}
+
+int Plan::getPlanId() const{
+    return plan_id;
 }
 
 string Plan::facilitiesToString() const {

@@ -14,6 +14,7 @@ class Plan {
     public:
     //Constructor
         Plan(const int planId, const Settlement &settlement, SelectionPolicy *selectionPolicy, const vector<FacilityType> &facilityOptions);
+        Plan(const Settlement &settlement,const Plan &other);
 
     //Rule Of 3:
         // Copy-Constructor
@@ -45,6 +46,8 @@ class Plan {
         void printStatus();
         void addFacility(Facility* facility);
         const string toString() const;
+        Settlement getSettlement() const;
+        int getPlanId() const;
         string statusToString() const;
         string facilitiesToString() const;
         string getSelectionPolicy () const; //to do
