@@ -81,8 +81,7 @@ Simulation &Simulation::operator=(const Simulation &other){
             settlements.push_back(new Settlement(*settlement));
         }
 
-        copy(other.facilitiesOptions.begin(), other.facilitiesOptions.end(), facilitiesOptions.begin()); // The shallow default copy is good
-
+        facilitiesOptions = other.facilitiesOptions;
         isRunning = other.isRunning;
         planCounter = other.planCounter;
         }
@@ -122,6 +121,8 @@ Simulation::Simulation(Simulation &&other)
     for(Settlement *settlement : settlements){
         settlement = nullptr;
     }
+    other.plans = {};
+    other.facilitiesOptions = {};
 }
 
 //Move Assignment Operator:
@@ -137,6 +138,9 @@ Simulation &Simulation::operator=(Simulation &&other){
         facilitiesOptions = other.facilitiesOptions;
 
         //making all the pointers of other to "nullptr" because it's not under other anymore:
+        other.plans = {};
+        other.facilitiesOptions = {};
+
         for(BaseAction *action : actionsLog){
             action = nullptr;
         }
@@ -337,7 +341,7 @@ void Simulation::open(){
 }
 
 void Simulation::setSelectionPolicy(const string &selectionPolicy, int planID) {
-    Plan &plan = getPlan(planID); // שימוש בהפניה כדי לעדכן ישירות את התוכנית
+    Plan &plan = getPlan(planID); 
     SelectionPolicy *policy = nullptr;
 
     if (selectionPolicy == "nve") {
