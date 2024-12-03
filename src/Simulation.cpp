@@ -166,6 +166,8 @@ void Simulation::clear(){
             delete settlement;
         }
         settlements.clear();
+
+        facilitiesOptions.clear();
 }
 
  /********************************************************************************************************* */
@@ -220,6 +222,7 @@ void Simulation::start(){
             BaseAction *close = new Close();
             close ->act(*this);
             addAction(close);
+            clear();
         }  
         else if (tokens[0] == "backup") {
             BaseAction *backupSimulation = new BackupSimulation();
@@ -261,20 +264,21 @@ bool Simulation::addSettlement(Settlement *settlement){
 bool Simulation::addFacility(FacilityType facility){
     bool isFacilityExist = false;
     for (FacilityType facilityOption : facilitiesOptions){
-        isFacilityExist = facilityOption == facility;
-    }
+        isFacilityExist = facilityOption.getName() == facility.getName();
+        if (isFacilityExist){
+            return false;
+        }
+    }  
     if (!isFacilityExist){
         facilitiesOptions.push_back(facility);
         return true;
     }
-    else{
-        return false;
-    }    
 }
 
 bool Simulation::isSettlementExists(const string &settlementName){
     for(Settlement *settlement : settlements){
-        if (settlement->getName() == settlementName){
+        string otherName = settlement->getName();
+        if (otherName == settlementName){
             return true;
         }
     }

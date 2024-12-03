@@ -75,7 +75,8 @@ AddPlan::AddPlan(const string &settlementName, const string &selectionPolicy):
 
 //Methods:
 void AddPlan::act(Simulation &simulation){
-    if (selectionPolicy != "nve" && selectionPolicy != "bal" && selectionPolicy == "eco" && selectionPolicy != "env"){
+    bool isSelectionPolicy = selectionPolicy == "nve" || selectionPolicy == "bal" || selectionPolicy == "eco" || selectionPolicy == "env";
+    if (!isSelectionPolicy || !simulation.isSettlementExists(settlementName) ){
         error("Cannot creat this plan");
     }
     else {
