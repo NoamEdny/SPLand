@@ -1,48 +1,17 @@
-# Compiler and flags
-CXX = g++
-CXXFLAGS = -g -Wall -Weffc++ -std=c++11 -Iinclude
+all: link
 
-# Directories
-SRC_DIR = src
-INCLUDE_DIR = include
-BIN_DIR = bin
+link: compile
+	g++ -o bin/main bin/main.o bin/Simulation.o bin/Action.o bin/Plan.o bin/SelectionPolicy.o bin/Facility.o bin/Settlement.o bin/Auxiliary.o
 
-# Target executable
-TARGET = $(BIN_DIR)/main
+compile: src/Auxiliary.cpp src/Settlement.cpp src/Facility.cpp src/SelectionPolicy.cpp src/Plan.cpp src/Action.cpp src/Simulation.cpp src/main.cpp
+	g++ -g -Wall -Weffc++ -std=c++11 -c -Iinclude -o bin/main.o src/main.cpp
+	g++ -g -Wall -Weffc++ -std=c++11 -c -Iinclude -o bin/Action.o src/Action.cpp
+	g++ -g -Wall -Weffc++ -std=c++11 -c -Iinclude -o bin/Plan.o src/Plan.cpp
+	g++ -g -Wall -Weffc++ -std=c++11 -c -Iinclude -o bin/SelectionPolicy.o src/SelectionPolicy.cpp
+	g++ -g -Wall -Weffc++ -std=c++11 -c -Iinclude -o bin/Simulation.o src/Simulation.cpp
+	g++ -g -Wall -Weffc++ -std=c++11 -c -Iinclude -o bin/Facility.o src/Facility.cpp
+	g++ -g -Wall -Weffc++ -std=c++11 -c -Iinclude -o bin/Settlement.o src/Settlement.cpp
+	g++ -g -Wall -Weffc++ -std=c++11 -c -Iinclude -o bin/Auxiliary.o src/Auxiliary.cpp
 
-# Source files
-SRCS = $(SRC_DIR)/main.cpp \
-       $(SRC_DIR)/Simulation.cpp \
-       $(SRC_DIR)/Action.cpp \
-       $(SRC_DIR)/Auxiliary.cpp \
-       $(SRC_DIR)/SelectionPolicy.cpp \
-       $(SRC_DIR)/Facility.cpp \
-       $(SRC_DIR)/Settlement.cpp \
-       $(SRC_DIR)/Plan.cpp  # הוספתי את Plan.cpp
-
-# Object files
-OBJS = $(SRCS:$(SRC_DIR)/%.cpp=$(BIN_DIR)/%.o)
-
-# All target
-all: clean bin $(TARGET)
-
-# Clean target
 clean:
-	rm -rf $(BIN_DIR)/*.o $(TARGET)
-
-# Create bin directory
-bin:
-	mkdir -p $(BIN_DIR)
-
-# Compile all .cpp files
-$(BIN_DIR)/%.o: $(SRC_DIR)/%.cpp
-	$(CXX) $(CXXFLAGS) -c -o $@ $<
-
-# Link object files to create the final executable
-$(TARGET): $(OBJS)
-	$(CXX) $(CXXFLAGS) -o $@ $^
-
-# Run the executable
-run: $(TARGET)
-	./$(TARGET)
-
+	rm -rf bin/*

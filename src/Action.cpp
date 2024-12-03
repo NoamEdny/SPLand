@@ -42,9 +42,7 @@ string BaseAction::statusToString(ActionStatus status) const{
 //************************************************  SimulateStep ************************************************
 
 //Constractor
-SimulateStep::SimulateStep(const int numOfSteps) : numOfSteps(numOfSteps) {
-    std::cout << "SimulateStep constructor called with numOfSteps: " << numOfSteps << std::endl;
-}
+SimulateStep::SimulateStep(const int numOfSteps) : numOfSteps(numOfSteps) {}
 
 
 SimulateStep::SimulateStep() : numOfSteps(1) {}
@@ -58,7 +56,7 @@ void SimulateStep::act(Simulation &simulation) {
  }
 
  const string SimulateStep::toString() const{
-    return "Step: " + std::to_string(numOfSteps) + statusToString(getStatus());
+    return "Step: " + std::to_string(numOfSteps)+" " + statusToString(getStatus());
  }
 
  SimulateStep *SimulateStep::clone() const{
@@ -113,7 +111,7 @@ void AddSettlement::act(Simulation &simulation){
 }
 
 const string AddSettlement::toString() const{
-    return "Settlement: " + settlementName + " " + std::to_string(static_cast<int>(settlementType)) + statusToString(getStatus());
+    return "Settlement: " + settlementName + " " + std::to_string(static_cast<int>(settlementType)) +" "+ statusToString(getStatus());
 }
 
 AddSettlement *AddSettlement::clone() const{
@@ -160,7 +158,7 @@ PrintPlanStatus::PrintPlanStatus(int planId) : planId(planId) {}
 
 //Methods:
 void PrintPlanStatus::act(Simulation &simulation) {
-    if (simulation.getPlanCounter() < planId) {
+    if (simulation.getPlanCounter() - 1 < planId)  {
         error ("Plan doesn't exist");
     }
     else {
@@ -274,7 +272,7 @@ BackupSimulation *BackupSimulation::clone() const {
 }
 
 const string BackupSimulation::toString() const {
-    return "extern " + statusToString(getStatus());
+    return "backup " + statusToString(getStatus());
 }
 
 //***********************************************************************************************************

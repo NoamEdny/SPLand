@@ -28,11 +28,11 @@ Plan::Plan(const Plan &other)
 
     //Deep Copy of the Facility lists:
     for(Facility* facility : other.underConstruction){
-        addFacility(new Facility(*facility));
+       underConstruction.push_back(new Facility(*facility));
     }
 
     for(Facility* facility : other.facilities){
-        addFacility(new Facility(*facility));
+       facilities.push_back(new Facility(*facility));
     }
 }
 
@@ -66,6 +66,12 @@ Plan::Plan(Plan &&other)
     environment_score = other.getEnvironmentScore();
 
     //shallow Copy of the Facility lists and Reset the pointers of other to null:
+    facilities = other.facilities;
+    other.facilities = {};
+
+    underConstruction = other.underConstruction;
+    underConstruction = {};
+    /*
     for(Facility* facility : other.underConstruction){
         addFacility(facility);
         facility = nullptr;
@@ -75,6 +81,7 @@ Plan::Plan(Plan &&other)
         addFacility(facility);
         facility = nullptr;
     }
+    */
 
     other.selectionPolicy = nullptr;
 

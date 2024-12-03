@@ -45,7 +45,8 @@ Simulation::Simulation(const Simulation &other){
     }
     //Plan (it's may seems like we don't need deep copy, but Plan has a pointer field)
     for(Plan plan : other.plans){
-        plans.push_back(Plan(plan));
+        Plan newPlan = Plan(plan);
+        plans.push_back(newPlan);
     }
 
     //settlements:
@@ -71,7 +72,8 @@ Simulation &Simulation::operator=(const Simulation &other){
         }
         //Plan (it's may seems like we don't need deep copy, but Plan has a pointer field)
         for(Plan plan : other.plans){
-            plans.push_back(Plan(plan));
+            Plan newPlan = Plan(plan);
+            plans.push_back(newPlan);
         }
 
         //settlements:
