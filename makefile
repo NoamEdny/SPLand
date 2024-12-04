@@ -15,3 +15,6 @@ compile: src/Auxiliary.cpp src/Settlement.cpp src/Facility.cpp src/SelectionPoli
 
 clean:
 	rm -rf bin/*
+
+c: all
+	valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes ./bin/main config_file.txt

@@ -84,7 +84,7 @@ void AddPlan::act(Simulation &simulation){
 }
 
 const string AddPlan::toString() const{
-    return "Plan: " + settlementName + selectionPolicy + statusToString(getStatus());
+    return "Plan: " + settlementName+ " " + selectionPolicy +" "+ statusToString(getStatus());
 }
 
 AddPlan *AddPlan::clone() const{
